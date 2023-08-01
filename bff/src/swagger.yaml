@@ -1,0 +1,66 @@
+openapi: 3.0.3
+info:
+  title: Personal Website - Swagger
+  version: 0.0.1
+  
+servers:
+  - url: http://localhost:3001/api
+  
+tags:
+  - name: project
+    description: Everything about my projects
+    
+paths:
+  /projects:
+    get:
+      tags:
+        - project
+      summary: Gets all projects
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 9863df78-d71d-4a66-81ea-581a70482b14
+        title:
+          type: string
+          example: Project ABC
+        description:
+          type: string
+          example: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        tags:
+          type: array
+          items:
+            type: string
+            example: front-end
+        githubUrl:
+          type: string
+          format: url
+          example: https://github.com/bagnascojhoel/portfolio-website
+        websiteUrl:
+          type: string
+          format: url
+          example: https://bagnascojhoel.com.br
+    Error:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Something is wrong on the back-end. 
+          
