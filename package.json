@@ -1,0 +1,10 @@
+{
+  "name": "portfolio-website-monorepo",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "Jhoel Bagnasco <bagnascojhoel@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "yarn --cwd=back dev & yarn --cwd=front dev"
+  }
+}
