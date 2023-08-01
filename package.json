@@ -5,6 +5,7 @@
   "author": "Jhoel Bagnasco <bagnascojhoel@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "yarn --cwd=back dev & yarn --cwd=front dev"
+    "dev": "yarn --cwd=back dev & yarn --cwd=front dev",
+    "test:back": "yarn --cwd=back test"
   }
 }
