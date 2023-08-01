@@ -1,0 +1,38 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "include": [
+    "src/**/*",
+    "mock"
+  ],
+  "exclude": [
+    "node_modules/*",
+    "public/*"
+  ],
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "baseUrl": "src",
+    "paths": {
+      "@components/*": [
+        "components/*"
+      ],
+      "@screens/*": [
+        "screens/*"
+      ],
+      "@assets/*": [
+        "assets/*"
+      ],
+      "@stores/*": [
+        "stores/*"
+      ],
+      "@types/*": [
+        "types/*"
+      ],
+      "@services/*": [
+        "services/*"
+      ],
+      "@infrastructure/*": [
+        "infrastructure/*"
+      ]
+    }
+  }
+}
