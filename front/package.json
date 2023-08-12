@@ -1,6 +1,6 @@
 {
   "name": "svelte-app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "devDependencies": {
     "@tsconfig/svelte": "^3.0.0",
     "@types/node": "^14.11.1",
