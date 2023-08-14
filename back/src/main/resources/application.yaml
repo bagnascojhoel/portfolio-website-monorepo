@@ -1,2 +1,10 @@
 
 server.servlet.context-path: /api
+
+project:
+  github:
+    host: api.github.com
+    project-description-file: portfolio-description.json
+    username: bagnascojhoel
+    app-id: 375399
+    private-key-resource-path: classpath:bagnascojhoel-com-br.2023-08-13.private-key.der

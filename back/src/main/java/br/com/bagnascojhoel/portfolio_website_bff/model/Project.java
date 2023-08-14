@@ -1,8 +1,8 @@
-package br.com.bagnascojhoel.portfolio_website_bff.view;
+package br.com.bagnascojhoel.portfolio_website_bff.model;
 
 import java.util.List;
 
-public class ProjectDto {
+public class Project {
     private final String projectId;
     private final String title;
     private final String description;
@@ -10,7 +10,7 @@ public class ProjectDto {
     private final String repositoryUrl;
     private final String websiteUrl;
 
-    public ProjectDto(String projectId) {
+    public Project(String projectId) {
         this.projectId = projectId;
         this.title = "a new title";
         this.description = "description";
@@ -20,7 +20,7 @@ public class ProjectDto {
 
     }
 
-    public ProjectDto(String projectId, String title, String description, List<String> tags, String repositoryUrl, String websiteUrl) {
+    public Project(String projectId, String title, String description, List<String> tags, String repositoryUrl, String websiteUrl) {
         this.projectId = projectId;
         this.title = title;
         this.description = description;
