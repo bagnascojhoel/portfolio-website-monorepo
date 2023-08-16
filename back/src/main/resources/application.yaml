@@ -1,8 +1,8 @@
-
 server.servlet.context-path: /api
 
 project:
   github:
+    scheme: https
     host: api.github.com
     project-description-file: portfolio-description.json
     username: bagnascojhoel
