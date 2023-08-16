@@ -4,8 +4,10 @@ import org.mockserver.client.MockServerClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestComponent;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
@@ -15,7 +17,8 @@ import static org.mockserver.model.Parameter.param;
 @TestComponent
 public record GithubMockServer(
     @Value("${project.github.host}") String githubHost,
-    @Value("${project.github.username}") String githubUsername
+    @Value("${project.github.username}") String githubUsername,
+    @Value("${project.github.project-description-file}") String githubFileName
 ) {
   private static final String MY_INSTALLATION_ID = "6125";
 
@@ -23,6 +26,8 @@ public record GithubMockServer(
     mockOkayUserInstallationAccessTokens(mockServer);
     mockOkayUserInstallation(mockServer);
     mockOkayUserRepos(mockServer);
+    mockOkayProjectDescriptionFileRepository1(mockServer);
+    mockOkayProjectDescriptionFileRepository2(mockServer);
   }
 
   public void mockOkayUserInstallation(MockServerClient mockServerClient) {
@@ -93,6 +98,65 @@ public record GithubMockServer(
                     }
                     """.replace("{expiresAt}", expiresAt))
                 )
+        );
+  }
+
+
+  public void mockOkayProjectDescriptionFileRepository1(MockServerClient mockServerClient) {
+    var encodedContent = Base64.getEncoder().encodeToString("""
+        {
+          "title": "Portfolio Website",
+          "tags": ["frontend", "backend", "java", "svelte"],
+          "description": "This is my portfolio website.",
+          "websiteUrl": "https://my-website.com"
+        }""".getBytes(StandardCharsets.UTF_8));
+
+    mockServerClient
+        .when(request()
+            .withMethod("GET")
+            .withPath("/repos/{username}/{repoName}/contents/{fileName}")
+            .withPathParameters(
+                param("username", githubUsername),
+                param("repoName", "repository-1"),
+                param("fileName", githubFileName)
+            )
+        ).respond(response()
+            .withStatusCode(200)
+            .withBody(json("""
+                    {
+                      "content": "{encodedContent}",
+                    }
+                """.replace("{encodedContent}", encodedContent))
+            )
+        );
+  }
+
+  public void mockOkayProjectDescriptionFileRepository2(MockServerClient mockServerClient) {
+    var encodedContent = Base64.getEncoder().encodeToString("""
+        {
+          "title": "A Project",
+          "tags": ["backend",  "docker"],
+          "description": "Checkout-less ecommerce."
+        }
+        """.getBytes(StandardCharsets.UTF_8));
+
+    mockServerClient
+        .when(request()
+            .withMethod("GET")
+            .withPath("/repos/{username}/{repoName}/contents/{fileName}")
+            .withPathParameters(
+                param("username", githubUsername),
+                param("repoName", "repository-2"),
+                param("fileName", githubFileName)
+            )
+        ).respond(response()
+            .withStatusCode(200)
+            .withBody(json("""
+                    {
+                      "content": "{encodedContent}",
+                    }
+                """.replace("{encodedContent}", encodedContent))
+            )
         );
   }
 

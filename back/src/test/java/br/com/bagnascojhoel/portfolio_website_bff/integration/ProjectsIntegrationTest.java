@@ -12,9 +12,9 @@ import org.mockserver.junit.jupiter.MockServerExtension;
 import org.mockserver.junit.jupiter.MockServerSettings;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.web.client.RestTemplate;
 
 import static io.restassured.RestAssured.get;
 
@@ -30,9 +30,9 @@ public class ProjectsIntegrationTest {
   @LocalServerPort
   String port;
   @Autowired
-  RestTemplate restTemplate;
-  @Autowired
   GithubMockServer githubMockServer;
+  @Value("${project.github.username}")
+  String githubUsername;
 
   @BeforeEach
   void beforeEach(MockServerClient mockServerClient) {
@@ -53,14 +53,23 @@ public class ProjectsIntegrationTest {
                 {
                     "projects": [
                         {
-                            "uniqueName": "repository-1"
+                            "uniqueName": "repository-1",
+                            "title": "Portfolio Website",
+                            "description": "This is my portfolio website.",
+                            "tags": ["frontend", "backend", "java", "svelte"],
+                            "repositoryUrl": "https://github.com/{username}/repository-1",
+                            "websiteUrl": "https://my-website.com"
                         },
                         {
-                            "uniqueName": "repository-2"
+                            "uniqueName": "repository-2",
+                            "title": "A Project",
+                            "description": "Checkout-less ecommerce.",
+                            "tags": ["backend", "docker"],
+                            "repositoryUrl": "https://github.com/{username}/repository-2"
                         }
                     ]
                 }
-            """,
+            """.replace("{username}", githubUsername),
         responseBody,
         false
     );
