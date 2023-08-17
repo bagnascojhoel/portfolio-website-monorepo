@@ -29,7 +29,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
 
     implementation 'com.auth0:java-jwt:4.4.0'
-    
+
     testImplementation 'org.mock-server:mockserver-junit-jupiter:5.15.0'
 
 }
@@ -43,6 +43,7 @@ tasks.named('build') {
 }
 
 task buildDockerImage(type: Exec) {
+    group "deploy"
     dependsOn bootJar
     commandLine 'docker',
             'image',
@@ -55,6 +56,7 @@ task buildDockerImage(type: Exec) {
 }
 
 task deployToFly(type: Exec) {
+    group "deploy"
     dependsOn buildDockerImage
     commandLine 'fly', 'deploy', '--local-only', '--auto-confirm'
 }

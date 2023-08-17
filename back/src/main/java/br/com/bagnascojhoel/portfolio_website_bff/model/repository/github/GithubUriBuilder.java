@@ -17,7 +17,7 @@ public class GithubUriBuilder {
   public GithubUriBuilder(
       @Value("${project.github.host}") String host,
       @Value("${project.github.scheme}") String scheme,
-      @Value("${project.github.port}") String port
+      @Value("${project.github.port:#{null}}") String port
   ) {
     this.host = host;
     this.scheme = scheme;

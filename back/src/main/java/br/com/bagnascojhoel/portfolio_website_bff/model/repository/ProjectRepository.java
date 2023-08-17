@@ -10,9 +10,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -51,8 +53,17 @@ public class ProjectRepository {
     List<GithubRepositoryResponse> githubRepositories = this.getGitHubRepositories();
 
     Set<Project> projectsWithDescription = new HashSet<>();
-    githubRepositories.forEach(repo -> {
-      GithubDescriptionDto projectDescription = getProjectDescription(repo.name);
+    for (var repo : githubRepositories) {
+      GithubDescriptionDto projectDescription;
+      try {
+        projectDescription = getProjectDescription(repo.name);
+      } catch (HttpClientErrorException httpClientErrorException) {
+        if (HttpStatus.NOT_FOUND.equals(httpClientErrorException.getStatusCode())) {
+          continue;
+        } else {
+          throw httpClientErrorException;
+        }
+      }
       projectsWithDescription.add(Project.builder()
           .uniqueName(repo.name)
           .description(projectDescription.description)
@@ -61,7 +72,7 @@ public class ProjectRepository {
           .title(projectDescription.title)
           .websiteUrl(projectDescription.websiteUrl)
           .build());
-    });
+    }
 
     return projectsWithDescription;
   }
@@ -74,8 +85,9 @@ public class ProjectRepository {
         .header("authorization", "Bearer " + installationToken)
         .build();
     ResponseEntity<GithubRepositoryContentResponse> response = restTemplate.exchange(requestEntity, GithubRepositoryContentResponse.class);
-    byte[] decodedDescription = Base64.getDecoder().decode(Objects.requireNonNull(response.getBody().content));
     try {
+      var responseBody = Objects.requireNonNull(response.getBody());
+      byte[] decodedDescription = Base64.getMimeDecoder().decode(responseBody.content);
       return objectMapper.readValue(decodedDescription, GithubDescriptionDto.class);
     } catch (IOException ioException) {
       log.error("error while reading repository description file");

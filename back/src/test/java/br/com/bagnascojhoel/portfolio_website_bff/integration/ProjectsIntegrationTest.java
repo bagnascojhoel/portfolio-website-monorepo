@@ -40,6 +40,8 @@ public class ProjectsIntegrationTest {
     RestAssured.baseURI = "http://localhost:" + port + "/api";
   }
 
+
+  // Add test when repository does not contain the project-description file
   @Test
   void getProjectsHappyPath() throws JSONException {
     var responseBody = get("/projects")
