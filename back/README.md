@@ -8,6 +8,7 @@ This project is used as the backend for frontend of my portfolio website.
 - [ ] Include pagination
 - [ ] Get repository file content concurrently (ProjectRepository)
 - [ ] Add exception handling
+- [ ] Webhook evict cache when repo has been added or changed
 
 ## Issues Along the Way
 
@@ -17,16 +18,16 @@ When trying to decrypt a `.pem` key file in java, it does not read correctly. Th
 
 ```java
         var keyFactory=getRSAFactory();
-    var privateKeySpecContent=getPrivateKeyFileContent();
-    var keySpec=new PKCS8EncodedKeySpec(privateKeySpecContent);
+        var privateKeySpecContent=getPrivateKeyFileContent();
+        var keySpec=new PKCS8EncodedKeySpec(privateKeySpecContent);
 
-    RSAPrivateKey privateKey;
-    try{
-    privateKey=(RSAPrivateKey)keyFactory.generatePrivate(keySpec);
-    }catch(InvalidKeySpecException invalidKeySpecException){
-    log.error("key specification could not be used to generate github's private key");
-    throw new UnrecoverableError(invalidKeySpecException);
-    }
+        RSAPrivateKey privateKey;
+        try{
+        privateKey=(RSAPrivateKey)keyFactory.generatePrivate(keySpec);
+        }catch(InvalidKeySpecException invalidKeySpecException){
+        log.error("key specification could not be used to generate github's private key");
+        throw new UnrecoverableError(invalidKeySpecException);
+        }
 ```
 
 The snippet `keyFactory.generatePrivate(keySpec)` will throw an error because the `keySpec` was read from a `.pem` file.

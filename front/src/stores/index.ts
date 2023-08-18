@@ -1,1 +1,1 @@
-export { default as GithubApiErrorStore } from './github-api-error';
+export { default as GithubApiErrorStore } from './GithubApiErrorStore';

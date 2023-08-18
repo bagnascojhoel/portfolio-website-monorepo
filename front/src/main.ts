@@ -1,23 +1,21 @@
+import axios from 'axios';
 import App from './App.svelte';
 
-import GitHubAxiosProjectService from '@infrastructure/services/GitHubAxiosProjectService';
-import GitHubAxiosClient from '@infrastructure/common/GitHubAxiosClient';
-import TailwindThemeConfiguration from '@infrastructure/configurations/TailwindThemeConfiguration';
+import AxiosClient from '@infra/common/AxiosClient';
+import TailwindThemeConfiguration from '@infra/configurations/TailwindThemeConfiguration';
+import AxiosProjectService from '@infra/services/AxiosProjectService';
 
-if (process.env.MOCK_ENABLED === 'true') {
-  const worker = require('./infrastructure/mocks/server');
-  worker.default.start();
-}
-
-const githubClient = new GitHubAxiosClient(process.env.GITHUB_URL);
+const bffClient = new AxiosClient(
+  axios.create({ baseURL: process.env.API_URL })
+);
 
 const context = new Map();
-context.set('ProjectService', new GitHubAxiosProjectService(githubClient));
+context.set('ProjectService', new AxiosProjectService(bffClient));
 context.set('Theme', new TailwindThemeConfiguration().getTheme());
 
 const app = new App({
   context,
-  target: document.body
+  target: document.body,
 });
 
 export default app;

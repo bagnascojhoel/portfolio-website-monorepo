@@ -1,0 +1,5 @@
+{
+  "title": "My Portfolio Website",
+  "tags": ["web app", "svelte", "tailwindcss", "java", "spring", "github-api"],
+  "description": "This is my portfolio website. I wanted to learn new technologies, so I did it with Svelte and Tailwindcss. The projects are fetched through GitHub's API. Each project has a `json` file which describes the card's content."
+}

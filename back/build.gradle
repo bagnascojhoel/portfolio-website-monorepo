@@ -21,6 +21,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
+
     testImplementation 'io.rest-assured:rest-assured:5.3.1'
 
     testImplementation 'org.skyscreamer:jsonassert:1.5.1'
@@ -55,8 +57,8 @@ task buildDockerImage(type: Exec) {
             '.'
 }
 
-task deployToFly(type: Exec) {
-    group "deploy"
-    dependsOn buildDockerImage
-    commandLine 'fly', 'deploy', '--local-only', '--auto-confirm'
-}
+//task deployToFly(type: Exec) {
+//    group "deploy"
+//    dependsOn buildDockerImage
+//    commandLine 'sh', '-c', 'fly deploy --remote-only --auto-confirm'
+//}

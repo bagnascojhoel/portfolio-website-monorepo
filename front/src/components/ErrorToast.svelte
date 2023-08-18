@@ -1,27 +1,25 @@
 <script lang="ts">
-  import GithubApiErrorStore from '@stores/github-api-error';
-
   const MILISECONDS_DURATION = 5000;
 
   let text: string = null;
   let visible: boolean = false;
 
-  function tearDown() {
-    visible = false;
-    text = null;
-  }
+  // function tearDown() {
+  //   visible = false;
+  //   text = null;
+  // }
 
-  function setUp(newText) {
-    visible = true;
-    text = newText;
-  }
+  // function setUp(newText) {
+  //   visible = true;
+  //   text = newText;
+  // }
 
-  GithubApiErrorStore.subscribe((value) => {
-    if (!value) return;
+  // GithubApiErrorStore.subscribe((value) => {
+  //   if (!value) return;
 
-    setUp(value);
-    setTimeout(tearDown, MILISECONDS_DURATION);
-  });
+  //   setUp(value);
+  //   setTimeout(tearDown, MILISECONDS_DURATION);
+  // });
 </script>
 
 <div

@@ -10,18 +10,23 @@ const WebpackBar = require('webpackbar');
 const DotenvPlugin = require('dotenv-webpack');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-exports.STATIC_FILES_PATH = path.resolve(process.cwd(), 'docs');
+exports.STATIC_FILES_PATH = path.resolve(process.cwd(), 'dist');
 
 exports.copyAssets = () => ({
-  plugins: [new CopyWebpackPlugin({
-    patterns: [
-      { from: 'src/assets/images', to: this.STATIC_FILES_PATH + '/assets/images' },
-      { from: 'src/assets/mockServiceWorker.js', to: this.STATIC_FILES_PATH }
-    ],
-  })]
-})
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'src/assets/images',
+          to: this.STATIC_FILES_PATH + '/assets/images',
+        },
+        { from: 'src/assets/mockServiceWorker.js', to: this.STATIC_FILES_PATH },
+      ],
+    }),
+  ],
+});
 
 exports.devServer = () => ({
   watch: true,
