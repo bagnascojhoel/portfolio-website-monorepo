@@ -56,9 +56,3 @@ task buildDockerImage(type: Exec) {
             '-t', "${project.name}:latest",
             '.'
 }
-
-//task deployToFly(type: Exec) {
-//    group "deploy"
-//    dependsOn buildDockerImage
-//    commandLine 'sh', '-c', 'fly deploy --remote-only --auto-confirm'
-//}
