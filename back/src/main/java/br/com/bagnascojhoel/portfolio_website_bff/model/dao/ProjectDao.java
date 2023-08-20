@@ -20,6 +20,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -77,7 +78,9 @@ public class ProjectDao {
                 .build();
 
         var response = restTemplate.exchange(requestEntity, GithubRepositoryDefinition[].class);
-        var definitions = Arrays.asList(Objects.requireNonNull(response.getBody()));
+        var definitions = Arrays.stream(Objects.requireNonNull(response.getBody()))
+                .filter(repo -> repo.archived() == null || !repo.archived())
+                .collect(Collectors.toList());
         return new PageImpl<>(definitions);
     }
 
