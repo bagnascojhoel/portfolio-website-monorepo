@@ -1,4 +1,4 @@
-package br.com.bagnascojhoel.portfolio_website_bff.model.repository;
+package br.com.bagnascojhoel.portfolio_website_bff.model.dao;
 
 public record HttpSchemes() {
     public static final String HTTPS = "https";

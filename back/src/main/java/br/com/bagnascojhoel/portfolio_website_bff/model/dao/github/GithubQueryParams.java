@@ -1,4 +1,4 @@
-package br.com.bagnascojhoel.portfolio_website_bff.model.repository.github;
+package br.com.bagnascojhoel.portfolio_website_bff.model.dao.github;
 
 public record GithubQueryParams() {
     public static final String PER_PAGE = "per_page";
