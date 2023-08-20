@@ -2,7 +2,7 @@ package br.com.bagnascojhoel.portfolio_website_bff.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record GithubRepositoryId(String name, @JsonProperty("html_url") String htmlUrl) {
+public record GithubRepositoryDefinition(String name, @JsonProperty("html_url") String htmlUrl) {
     @Override
     public String name() {
         return name;

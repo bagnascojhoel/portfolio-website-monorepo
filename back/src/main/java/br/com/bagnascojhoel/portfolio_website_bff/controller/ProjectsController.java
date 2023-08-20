@@ -1,18 +1,17 @@
 package br.com.bagnascojhoel.portfolio_website_bff.controller;
 
-import br.com.bagnascojhoel.portfolio_website_bff.model.GithubRepositoryId;
+import br.com.bagnascojhoel.portfolio_website_bff.model.GithubRepositoryDefinition;
 import br.com.bagnascojhoel.portfolio_website_bff.model.Project;
 import br.com.bagnascojhoel.portfolio_website_bff.model.ProjectDescription;
 import br.com.bagnascojhoel.portfolio_website_bff.model.dao.ProjectDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.client.HttpClientErrorException;
+import reactor.core.publisher.Flux;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,30 +20,18 @@ public class ProjectsController {
 
     @Cacheable("projects")
     public Set<Project> getMyProjects() {
-        Page<GithubRepositoryId> githubRepositories = projectDao.getGitHubRepositories(30);
+        Page<GithubRepositoryDefinition> githubRepositories = projectDao.getGithubRepositories(30);
+        Flux<ProjectDescription> flux = projectDao.getProjectsDescription(githubRepositories.toSet());
 
-        Set<Project> projectsWithDescription = new HashSet<>();
-        for (var repo : githubRepositories) {
-            ProjectDescription projectDescription;
-            try {
-                projectDescription = projectDao.getProjectDescription(repo.name());
-            } catch (HttpClientErrorException httpClientErrorException) {
-                if (HttpStatus.NOT_FOUND.equals(httpClientErrorException.getStatusCode())) {
-                    continue;
-                } else {
-                    throw httpClientErrorException;
-                }
-            }
-            projectsWithDescription.add(Project.builder()
-                    .uniqueName(repo.name())
-                    .description(projectDescription.description())
-                    .repositoryUrl(repo.htmlUrl())
-                    .tags(projectDescription.tags())
-                    .title(projectDescription.title())
-                    .websiteUrl(projectDescription.websiteUrl())
-                    .build());
-        }
-
-        return projectsWithDescription;
+        return flux.map(projectDescription -> Project.builder()
+                        .uniqueName(projectDescription.getName())
+                        .description(projectDescription.getDescription())
+                        .repositoryUrl(projectDescription.getHtmlUrl())
+                        .tags(projectDescription.getTags())
+                        .title(projectDescription.getTitle())
+                        .websiteUrl(projectDescription.getWebsiteUrl())
+                        .build())
+                .collect(Collectors.toSet())
+                .block();
     }
 }
