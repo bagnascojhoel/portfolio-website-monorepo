@@ -35,7 +35,7 @@ public class GithubAuthentication {
     private final String privateKeyResourcePath;
     private final String githubAppId;
     private final String githubUsername;
-    private final String privateBase64Key;
+    private final String privateKeyBase64;
 
     private String myInstallationId;
 
@@ -46,14 +46,14 @@ public class GithubAuthentication {
             @Value("${project.github.app-id}") String githubAppId,
             @Value("${project.github.username}") String username,
             @Value("${project.github.private-key-resource-path:#{null}}") String privateKeyResourcePath,
-            @Value("${project.github.private-key-base-64:#{null}}") String privateBase64Key) {
+            @Value("${project.github.private-key-base-64:#{null}}") String privateKeyBase64) {
         this.restTemplate = restTemplate;
         this.resourceLoader = resourceLoader;
         this.githubUriBuilder = githubUriBuilder;
         this.githubAppId = githubAppId;
         this.githubUsername = username;
         this.privateKeyResourcePath = privateKeyResourcePath;
-        this.privateBase64Key = privateBase64Key;
+        this.privateKeyBase64 = privateKeyBase64;
     }
 
     public String generateAuthenticationToken() {
@@ -95,8 +95,8 @@ public class GithubAuthentication {
         var keyFactory = getRSAFactory();
 
         byte[] encodedKey;
-        if (privateBase64Key != null) {
-            encodedKey = Base64.getDecoder().decode(privateBase64Key);
+        if (privateKeyBase64 != null) {
+            encodedKey = Base64.getDecoder().decode(privateKeyBase64);
         } else if (privateKeyResourcePath != null) {
             encodedKey = getPrivateKeyFileContent();
         } else {
