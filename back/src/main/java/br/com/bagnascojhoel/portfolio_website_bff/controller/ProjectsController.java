@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class ProjectsController {
     private final ProjectDao projectDao;
 
-    @Scheduled(fixedDelayString = "${project.scheduling.load-projects-delay}")
+    @Scheduled(initialDelayString = "PT5S", fixedDelayString = "${project.scheduling.load-projects-delay}")
     @Cacheable("projects")
     public Set<Project> getMyProjects() {
         Page<GithubRepositoryDefinition> githubRepositories = projectDao.getGithubRepositories(30);
