@@ -16,9 +16,11 @@ import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 import java.util.Objects;
 
 @Component
@@ -33,6 +35,7 @@ public class GithubAuthentication {
     private final String privateKeyResourcePath;
     private final String githubAppId;
     private final String githubUsername;
+    private final String privateBase64Key;
 
     private String myInstallationId;
 
@@ -42,13 +45,15 @@ public class GithubAuthentication {
             GithubUriBuilder githubUriBuilder,
             @Value("${project.github.app-id}") String githubAppId,
             @Value("${project.github.username}") String username,
-            @Value("${project.github.private-key-resource-path}") String privateKeyResourcePath) {
+            @Value("${project.github.private-key-resource-path:#{null}}") String privateKeyResourcePath,
+            @Value("${project.github.private-key-base-64:#{null}}") String privateBase64Key) {
         this.restTemplate = restTemplate;
         this.resourceLoader = resourceLoader;
         this.githubUriBuilder = githubUriBuilder;
         this.githubAppId = githubAppId;
         this.githubUsername = username;
         this.privateKeyResourcePath = privateKeyResourcePath;
+        this.privateBase64Key = privateBase64Key;
     }
 
     public String generateAuthenticationToken() {
@@ -88,9 +93,17 @@ public class GithubAuthentication {
 
     private RSAPrivateKey getRSA256PrivateKey() {
         var keyFactory = getRSAFactory();
-        var privateKeySpecContent = getPrivateKeyFileContent();
-        var keySpec = new PKCS8EncodedKeySpec(privateKeySpecContent);
 
+        byte[] encodedKey;
+        if (privateBase64Key != null) {
+            encodedKey = Base64.getDecoder().decode(privateBase64Key);
+        } else if (privateKeyResourcePath != null) {
+            encodedKey = getPrivateKeyFileContent();
+        } else {
+            throw new IllegalStateException("there is no way to get encryption key");
+        }
+
+        KeySpec keySpec = new PKCS8EncodedKeySpec(encodedKey);
         RSAPrivateKey privateKey;
         try {
             privateKey = (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
