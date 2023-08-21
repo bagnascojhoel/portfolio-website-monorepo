@@ -7,6 +7,7 @@ import br.com.bagnascojhoel.portfolio_website_bff.model.dao.ProjectDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
 
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class ProjectsController {
     private final ProjectDao projectDao;
 
+    @Scheduled(fixedDelayString = "${project.scheduling.load-projects-delay}")
     @Cacheable("projects")
     public Set<Project> getMyProjects() {
         Page<GithubRepositoryDefinition> githubRepositories = projectDao.getGithubRepositories(30);

@@ -1,6 +1,10 @@
 server.servlet.context-path: /api
 
 project:
+  scheduling:
+    load-projects-delay: PT6H
+  cache:
+    duration: PT6H
   github:
     scheme: https
     host: api.github.com
@@ -8,3 +12,7 @@ project:
     username: bagnascojhoel
     app-id: 375399
     private-key-resource-path: classpath:bagnascojhoel-com-br.2023-08-13.private-key.der
+
+logging:
+  level:
+    org.springframework.cache: TRACE
