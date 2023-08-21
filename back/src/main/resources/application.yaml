@@ -4,6 +4,7 @@ project:
   scheduling:
     load-projects-delay: PT6H
   cache:
+    enabled: true
     duration: PT6H
   github:
     scheme: https

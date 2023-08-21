@@ -2,6 +2,7 @@ package br.com.bagnascojhoel.portfolio_website_bff;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
@@ -28,6 +29,7 @@ public class Configurations {
     }
 
     @Bean
+    @ConditionalOnProperty(value = "${project.cache.enabled}", havingValue = "true")
     public CacheManager cacheManager(@Value("${project.cache.duration}") final String duration) {
         var cacheManager = new CaffeineCacheManager();
         cacheManager.setCaffeine(Caffeine.newBuilder().maximumSize(1).expireAfterWrite(Duration.parse(duration)));
