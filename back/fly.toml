@@ -22,7 +22,7 @@ type = "requests"
 hard_limit = 200
 
 [[http_service.checks]]
-grace_period = "15s"
+grace_period = "20s"
 interval = "1h"
 method = "GET"
 path = "/api/actuator/health"
