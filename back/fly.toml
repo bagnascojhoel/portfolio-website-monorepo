@@ -7,15 +7,23 @@ app = "portfolio-website-bff"
 primary_region = "gru"
 
 [build]
-  image = "portfolio-website-bff:latest"
+image = "portfolio-website-bff:latest"
 
 [http_service]
-  internal_port = 8080
-  force_https = true
-  auto_stop_machines = false
-  auto_start_machines = false
-  min_machines_running = 1
-  processes = ["app"]
-  [http_service.concurrency]
-    type = "requests"
-    hard_limit = 200
+internal_port = 8080
+force_https = true
+auto_stop_machines = true
+auto_start_machines = true
+min_machines_running = 1
+processes = ["app"]
+
+[http_service.concurrency]
+type = "requests"
+hard_limit = 200
+
+[[http_service.checks]]
+grace_period = "15s"
+interval = "1h"
+method = "GET"
+path = "/api/actuator/health"
+timeout = "5s"
