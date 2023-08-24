@@ -36,6 +36,8 @@ dependencies {
 
     testImplementation 'org.mock-server:mockserver-spring-test-listener:5.15.0'
 
+    testImplementation 'org.awaitility:awaitility:3.1.0'
+
 }
 
 tasks.named('test') {

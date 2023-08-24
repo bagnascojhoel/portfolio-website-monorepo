@@ -2,7 +2,10 @@ server.servlet.context-path: /api
 
 project:
   scheduling:
-    load-projects-delay: PT6H
+    initial-delay:
+      load-projects: PT5S
+    fixed-delay:
+      load-projects: PT6H
   cache:
     enabled: true
     duration: PT6H

@@ -29,7 +29,7 @@ public class Configurations {
     }
 
     @Bean
-    @ConditionalOnProperty(value = "${project.cache.enabled}", havingValue = "true")
+    @ConditionalOnProperty(value = "project.cache.enabled", havingValue = "true")
     public CacheManager cacheManager(@Value("${project.cache.duration}") final String duration) {
         var cacheManager = new CaffeineCacheManager();
         cacheManager.setCaffeine(Caffeine.newBuilder().maximumSize(1).expireAfterWrite(Duration.parse(duration)));
