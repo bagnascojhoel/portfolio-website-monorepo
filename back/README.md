@@ -4,9 +4,7 @@ This project is used as the backend for frontend of my portfolio website.
 
 ## To-Do's
 
-- [ ] Use Amazon KMS to store RSA256 key
 - [ ] Include pagination
-- [ ] Get repository file content concurrently (ProjectRepository)
 - [ ] Add exception handling
 - [ ] Webhook evict cache when repo has been added or changed
 
