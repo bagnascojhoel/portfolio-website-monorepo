@@ -56,9 +56,9 @@ public class ProjectDao {
     }
 
     public Flux<ProjectDescription> getProjectsDescription(Set<GithubRepositoryDefinition> definitions) {
+        log.info("asynchronously fetching project description for repository definitions, repo-definitions={}", definitions);
         return Flux.fromIterable(definitions)
                 .flatMap(this::callGetProjectDescription)
-                .log()
                 .filter(res -> res.content != null)
                 .cast(GithubRepositoryContentResponse.class)
                 .map(this::mapContentResponse)

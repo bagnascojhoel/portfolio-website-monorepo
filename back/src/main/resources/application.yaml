@@ -2,13 +2,14 @@ server.servlet.context-path: /api
 
 project:
   scheduling:
+    enabled: ${project.cache.enabled}
     initial-delay:
       load-projects: PT5S
     fixed-delay:
       load-projects: PT6H
+      evict-projects: PT6H
   cache:
     enabled: true
-    duration: PT6H
   github:
     scheme: https
     host: api.github.com

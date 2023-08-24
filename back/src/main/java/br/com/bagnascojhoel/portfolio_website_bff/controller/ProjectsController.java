@@ -5,6 +5,7 @@ import br.com.bagnascojhoel.portfolio_website_bff.model.Project;
 import br.com.bagnascojhoel.portfolio_website_bff.model.ProjectDescription;
 import br.com.bagnascojhoel.portfolio_website_bff.model.dao.ProjectDao;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -36,5 +37,10 @@ public class ProjectsController {
                         .build())
                 .collect(Collectors.toSet())
                 .block();
+    }
+
+    @Scheduled(fixedDelayString = "${project.scheduling.fixed-delay.evict-projects}")
+    @CacheEvict(value = "projects", allEntries = true)
+    protected void evictCache() {
     }
 }
