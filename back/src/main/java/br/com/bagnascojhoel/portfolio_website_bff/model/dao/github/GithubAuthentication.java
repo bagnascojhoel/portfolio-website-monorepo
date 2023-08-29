@@ -38,6 +38,7 @@ public class GithubAuthentication {
     private final String privateKeyBase64;
 
     private String myInstallationId;
+    private Algorithm jwtSignAlgorithm;
 
     public GithubAuthentication(
             RestTemplate restTemplate,
@@ -88,7 +89,13 @@ public class GithubAuthentication {
                 .withIssuer(githubAppId)
                 .withIssuedAt(Instant.now().minusSeconds(30))
                 .withExpiresAt(Instant.now().plus(1, ChronoUnit.MINUTES))
-                .sign(Algorithm.RSA256(this.getRSA256PrivateKey()));
+                .sign(this.getJwtSignAlgorithm());
+    }
+
+    private Algorithm getJwtSignAlgorithm() {
+        return this.jwtSignAlgorithm == null
+                ? Algorithm.RSA256(this.getRSA256PrivateKey())
+                : this.jwtSignAlgorithm;
     }
 
     private RSAPrivateKey getRSA256PrivateKey() {
