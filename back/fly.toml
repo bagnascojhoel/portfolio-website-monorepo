@@ -27,3 +27,11 @@ interval = "1h"
 method = "GET"
 path = "/api/actuator/health"
 timeout = "5s"
+
+[[services]]
+internal_port = 7203
+protocol = 'tcp'
+
+[[services.ports]]
+handlers = ['http']
+port = 7203
