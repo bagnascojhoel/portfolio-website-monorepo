@@ -23,15 +23,7 @@ hard_limit = 200
 
 [[http_service.checks]]
 grace_period = "20s"
-interval = "1h"
+interval = "10m"
 method = "GET"
 path = "/api/actuator/health"
 timeout = "5s"
-
-[[services]]
-internal_port = 7203
-protocol = 'tcp'
-
-[[services.ports]]
-handlers = ['http']
-port = 7203
