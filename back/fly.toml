@@ -27,3 +27,12 @@ interval = "10m"
 method = "GET"
 path = "/api/actuator/health"
 timeout = "5s"
+
+[[services]]
+internal_port = 9010
+processes = ["app"]
+protocol = "tcp"
+
+[[services.ports]]
+handlers = ["http"]
+port = 9010

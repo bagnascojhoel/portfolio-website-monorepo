@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.2'
     id 'io.spring.dependency-management' version '1.1.2'
+//    id 'org.graalvm.buildtools.native' version '0.9.25'
 }
 
 group = 'br.com.bagnascojhoel'
@@ -46,8 +47,9 @@ tasks.named('build') {
 }
 
 task buildDockerImage(type: Exec) {
-    group "deploy"
+    group "build"
     dependsOn bootJar
+
     commandLine 'docker',
             'image',
             'build',
@@ -56,4 +58,5 @@ task buildDockerImage(type: Exec) {
             '-t', "${project.name}:${version}",
             '-t', "${project.name}:latest",
             '.'
+
 }
