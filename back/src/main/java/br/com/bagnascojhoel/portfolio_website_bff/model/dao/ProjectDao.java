@@ -129,9 +129,8 @@ public class ProjectDao {
     @Setter
     @Getter
     @Builder
-    @AllArgsConstructor
     @NoArgsConstructor
-//    @Accessors(chain = true)
+    @AllArgsConstructor
     public static class GithubRepositoryContentResponse {
         private String content;
         private String name;

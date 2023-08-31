@@ -147,7 +147,7 @@ public class ProjectsIntegrationTest {
         }
 
         @Test
-        void shouldBeUsingCacheWhenCacheIsEnabled() throws JSONException, InterruptedException {
+        void shouldBeUsingCacheWhenCacheIsEnabled() throws InterruptedException {
             githubMockServer.mockOkayUserInstallationAccessTokens(mockServerClient);
             githubMockServer.mockOkayUserInstallation(mockServerClient);
             githubMockServer.mockOkayUserRepos(mockServerClient);
@@ -166,16 +166,10 @@ public class ProjectsIntegrationTest {
             var timeForFourthRequest = get("/projects").then().extract().timeIn(TimeUnit.MILLISECONDS);
 
             assertThat(timeForSecondRequest)
-                    .withFailMessage("Time for second request should be equal to 90% lower than the time for first request")
-                    .isCloseTo(timeForFirstRequest, Assertions.withinPercentage(90));
+                    .isNotCloseTo(timeForFirstRequest, Assertions.withinPercentage(90));
             assertThat(timeForThirdRequest)
-                    .withFailMessage("Time for third request (happening after cache has expired) should be 100% close to than the first request")
                     .isCloseTo(timeForFirstRequest, Assertions.withinPercentage(100));
             assertThat(timeForFourthRequest)
-                    .withFailMessage("""
-                                Time for fourth request (happening after scheduled cache update has run) should be 100% close to
-                                second request (cache should have been set again)
-                            """)
                     .isCloseTo(timeForSecondRequest, Assertions.withinPercentage(100));
         }
 

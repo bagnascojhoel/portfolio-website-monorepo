@@ -16,7 +16,3 @@ project:
     project-description-file: portfolio-description.json
     username: bagnascojhoel
     app-id: 375399
-
-logging:
-  level:
-    org.springframework.cache: TRACE

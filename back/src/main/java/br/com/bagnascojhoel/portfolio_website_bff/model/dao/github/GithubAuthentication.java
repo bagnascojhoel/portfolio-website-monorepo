@@ -4,6 +4,7 @@ import br.com.bagnascojhoel.portfolio_website_bff.model.exception.UnrecoverableE
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
@@ -39,6 +40,7 @@ public class GithubAuthentication {
 
     private String myInstallationId;
     private Algorithm jwtSignAlgorithm;
+    private InstallationAccessToken installationAccessToken = InstallationAccessToken.createExpired();
 
     public GithubAuthentication(
             RestTemplate restTemplate,
@@ -58,30 +60,32 @@ public class GithubAuthentication {
     }
 
     public String generateAuthenticationToken() {
-        loadMyInstallationId();
-        var url = githubUriBuilder.withPath(INSTALLATION_ACCESS_TOKEN_PATH).build(this.myInstallationId);
-        var requestEntity = RequestEntity.post(url)
-                .header("authorization", "Bearer " + generateJwt())
-                .accept(GithubMediaTypes.GITHUB_JSON)
-                .build();
-        var response = restTemplate.exchange(requestEntity, InstallationAccessToken.class);
-        var accessToken = Objects.requireNonNull(response.getBody());
-        return accessToken.token;
+        if (this.installationAccessToken.hasExpired()) {
+            var myInstallationId = getMyInstallationId();
+            var url = githubUriBuilder.withPath(INSTALLATION_ACCESS_TOKEN_PATH).build(myInstallationId);
+            var requestEntity = RequestEntity.post(url)
+                    .header("authorization", "Bearer " + generateJwt())
+                    .accept(GithubMediaTypes.GITHUB_JSON)
+                    .build();
+            var response = restTemplate.exchange(requestEntity, InstallationAccessToken.class);
+            this.installationAccessToken = Objects.requireNonNull(response.getBody());
+        }
+        return this.installationAccessToken.token;
     }
 
-    private void loadMyInstallationId() {
-        if (myInstallationId != null) {
-            return;
+    private String getMyInstallationId() {
+        if (this.myInstallationId == null) {
+            var url = githubUriBuilder.withPath(MY_APP_INSTALLATION_PATH).build(githubUsername);
+            RequestEntity<Void> requestEntity = RequestEntity.get(url)
+                    .header("authorization", "Bearer " + generateJwt())
+                    .accept(GithubMediaTypes.GITHUB_JSON)
+                    .build();
+            var response = restTemplate.exchange(requestEntity, UserInstallation.class);
+            var responseBody = Objects.requireNonNull(response.getBody());
+            this.myInstallationId = responseBody.id;
         }
 
-        var url = githubUriBuilder.withPath(MY_APP_INSTALLATION_PATH).build(githubUsername);
-        RequestEntity<Void> requestEntity = RequestEntity.get(url)
-                .header("authorization", "Bearer " + generateJwt())
-                .accept(GithubMediaTypes.GITHUB_JSON)
-                .build();
-        var response = restTemplate.exchange(requestEntity, UserInstallation.class);
-        var responseBody = Objects.requireNonNull(response.getBody());
-        this.myInstallationId = responseBody.id;
+        return this.myInstallationId;
     }
 
     private String generateJwt() {
@@ -93,9 +97,10 @@ public class GithubAuthentication {
     }
 
     private Algorithm getJwtSignAlgorithm() {
-        return this.jwtSignAlgorithm == null
-                ? Algorithm.RSA256(this.getRSA256PrivateKey())
-                : this.jwtSignAlgorithm;
+        if (this.jwtSignAlgorithm == null) {
+            this.jwtSignAlgorithm = Algorithm.RSA256(this.getRSA256PrivateKey());
+        }
+        return this.jwtSignAlgorithm;
     }
 
     private RSAPrivateKey getRSA256PrivateKey() {
@@ -143,6 +148,14 @@ public class GithubAuthentication {
     private record UserInstallation(String id) {
     }
 
-    private record InstallationAccessToken(String token, @JsonProperty("expires_at") String expiresAt) {
+    private record InstallationAccessToken(@Nullable String token, @JsonProperty("expires_at") Instant expiresAt) {
+
+        public static InstallationAccessToken createExpired() {
+            return new InstallationAccessToken(null, Instant.MIN);
+        }
+
+        public boolean hasExpired() {
+            return !expiresAt.isAfter(Instant.now().plusSeconds(60));
+        }
     }
 }
