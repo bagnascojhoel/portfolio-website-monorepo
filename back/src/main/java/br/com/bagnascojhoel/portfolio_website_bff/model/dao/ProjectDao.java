@@ -9,8 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
@@ -55,7 +53,7 @@ public class ProjectDao {
         this.githubUsername = githubUsername;
     }
 
-    public Flux<ProjectDescription> getProjectsDescription(Set<GithubRepositoryDefinition> definitions) {
+    public Flux<ProjectDescription> getProjectsDescription(Collection<GithubRepositoryDefinition> definitions) {
         log.info("asynchronously fetching project description for repository definitions, repo-definitions={}", definitions);
         return Flux.fromIterable(definitions)
                 .flatMap(this::callGetProjectDescription)
@@ -66,7 +64,7 @@ public class ProjectDao {
                 .map(Optional::get);
     }
 
-    public Page<GithubRepositoryDefinition> getGithubRepositories(Integer limit) {
+    public List<GithubRepositoryDefinition> getGithubRepositories(Integer limit) {
         var url = githubUriBuilder.withPath(GITHUB_REPOSITORIES_PATH)
                 .queryParam(GithubQueryParams.PER_PAGE, limit)
                 .queryParam(GithubQueryParams.SORT, "pushed")
@@ -78,10 +76,9 @@ public class ProjectDao {
                 .build();
 
         var response = restTemplate.exchange(requestEntity, GithubRepositoryDefinition[].class);
-        var definitions = Arrays.stream(Objects.requireNonNull(response.getBody()))
+        return Arrays.stream(Objects.requireNonNull(response.getBody()))
                 .filter(repo -> repo.archived() == null || !repo.archived())
                 .collect(Collectors.toList());
-        return new PageImpl<>(definitions);
     }
 
     private Optional<ProjectDescription> mapContentResponse(GithubRepositoryContentResponse contentResponse) {

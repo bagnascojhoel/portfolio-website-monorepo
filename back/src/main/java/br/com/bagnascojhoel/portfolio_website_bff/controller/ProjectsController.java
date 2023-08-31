@@ -7,11 +7,11 @@ import br.com.bagnascojhoel.portfolio_website_bff.model.dao.ProjectDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,8 +24,8 @@ public class ProjectsController {
             fixedDelayString = "${project.scheduling.fixed-delay.load-projects}")
     @Cacheable("projects")
     public Set<Project> getMyProjects() {
-        Page<GithubRepositoryDefinition> githubRepositories = projectDao.getGithubRepositories(30);
-        Flux<ProjectDescription> flux = projectDao.getProjectsDescription(githubRepositories.toSet());
+        List<GithubRepositoryDefinition> githubRepositories = projectDao.getGithubRepositories(30);
+        Flux<ProjectDescription> flux = projectDao.getProjectsDescription(githubRepositories);
 
         return flux.map(projectDescription -> Project.builder()
                         .uniqueName(projectDescription.getName())

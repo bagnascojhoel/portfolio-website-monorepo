@@ -1,5 +1,8 @@
-server.servlet.context-path: /api
-
+server:
+  servlet.context-path: /api
+  tomcat:
+    threads:
+      max: 5
 project:
   scheduling:
     enabled: ${project.cache.enabled}
