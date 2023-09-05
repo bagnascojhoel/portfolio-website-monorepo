@@ -1,6 +1,7 @@
 package br.com.bagnascojhoel.portfolio_website_bff.code;
 
 import org.mockserver.client.MockServerClient;
+import org.mockserver.model.Delay;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestComponent;
 
@@ -8,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
+import java.util.concurrent.TimeUnit;
 
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
@@ -15,12 +17,24 @@ import static org.mockserver.model.JsonBody.json;
 import static org.mockserver.model.Parameter.param;
 
 @TestComponent
-public record GithubMockServer(
-        @Value("${project.github.host}") String githubHost,
-        @Value("${project.github.username}") String githubUsername,
-        @Value("${project.github.project-description-file}") String githubFileName
-) {
+public final class GithubMockServer {
     private static final String MY_INSTALLATION_ID = "6125";
+    @Value("${project.github.host}")
+    private final String githubHost;
+    @Value("${project.github.username}")
+    private final String githubUsername;
+    @Value("${project.github.project-description-file}")
+    private final String githubFileName;
+
+    public GithubMockServer(
+            @Value("${project.github.host}") String githubHost,
+            @Value("${project.github.username}") String githubUsername,
+            @Value("${project.github.project-description-file}") String githubFileName
+    ) {
+        this.githubHost = githubHost;
+        this.githubUsername = githubUsername;
+        this.githubFileName = githubFileName;
+    }
 
     public void mockOkayUserInstallation(MockServerClient mockServerClient) {
         mockServerClient
@@ -30,6 +44,7 @@ public record GithubMockServer(
                                 .withPath("/users/{username}/installation")
                                 .withPathParameter(param("username", githubUsername))
                 )
+                .withId("user_installation-200")
                 .respond(
                         response()
                                 .withStatusCode(200)
@@ -51,6 +66,7 @@ public record GithubMockServer(
                                 .withPath("/users/{username}/repos")
                                 .withPathParameter(param("username", githubUsername))
                 )
+                .withId("user_repos_200")
                 .respond(
                         response()
                                 .withStatusCode(200)
@@ -58,11 +74,18 @@ public record GithubMockServer(
                                         [
                                             {
                                                 "name": "repository-1",
-                                                "html_url": "https://github.com/{username}/repository-1"
+                                                "html_url": "https://github.com/{username}/repository-1",
+                                                "archived": false
                                             },
                                             {
                                                 "name": "repository-2",
-                                                "html_url": "https://github.com/{username}/repository-2"
+                                                "html_url": "https://github.com/{username}/repository-2",
+                                                "archived": false
+                                            },
+                                            {
+                                                "name": "repository-3",
+                                                "html_url": "https://github.com/{username}/repository-3",
+                                                "archived": true
                                             }
                                         ]
                                         """.replace("{username}", githubUsername))
@@ -80,7 +103,9 @@ public record GithubMockServer(
                                 .withMethod("POST")
                                 .withPath("/app/installations/{installationId}/access_tokens")
                                 .withPathParameter(param("installationId", MY_INSTALLATION_ID))
-                ).respond(
+                )
+                .withId("installation_access_token-200")
+                .respond(
                         response()
                                 .withStatusCode(200)
                                 .withBody(json("""
@@ -112,8 +137,11 @@ public record GithubMockServer(
                                 param("repoName", "repository-1"),
                                 param("fileName", githubFileName)
                         )
-                ).respond(response()
+                )
+                .withId("project_description_file_repository_1-200")
+                .respond(response()
                         .withStatusCode(200)
+                        .withDelay(Delay.delay(TimeUnit.SECONDS, 1))
                         .withBody(json("""
                                     {
                                       "content": "{encodedContent}",
@@ -141,7 +169,10 @@ public record GithubMockServer(
                                 param("repoName", "repository-2"),
                                 param("fileName", githubFileName)
                         )
-                ).respond(response()
+                )
+                .withId("project_description_file_repository_2-200")
+                .respond(response()
+                        .withDelay(Delay.delay(TimeUnit.SECONDS, 1))
                         .withStatusCode(200)
                         .withBody(json("""
                                     {
@@ -162,7 +193,10 @@ public record GithubMockServer(
                                 param("repoName", "repository-2"),
                                 param("fileName", githubFileName)
                         )
-                ).respond(response()
+                )
+                .withId("project_description_file_repository_2-404")
+                .respond(response()
+                        .withDelay(Delay.delay(TimeUnit.SECONDS, 1))
                         .withStatusCode(404)
                         .withBody(json("""
                                     {
@@ -172,6 +206,4 @@ public record GithubMockServer(
                         ))
                 );
     }
-
-
 }

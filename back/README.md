@@ -14,6 +14,11 @@ This project is used as the backend for frontend of my portfolio website.
 docker container run -v ~/workspaces/portfolio-website-monorepo/back:/resources -e PROJECT_GITHUB_PRIVATE_KEY_RESOURCE_PATH=file:/resources/bagnascojhoel-com-br.2023-08-21.private-key.der -p 8080:80 -p 9010:9010 portfolio-website-bff
 ```
 
+```shell
+./gradlew -Pagent test
+
+```
+
 ## Issues Along the Way
 
 ### JVM does not natively support .pem files

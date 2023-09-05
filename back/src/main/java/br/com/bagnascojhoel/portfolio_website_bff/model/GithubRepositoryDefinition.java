@@ -1,20 +1,13 @@
 package br.com.bagnascojhoel.portfolio_website_bff.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
-public record GithubRepositoryDefinition(String name, @JsonProperty("html_url") String htmlUrl, Boolean archived) {
-    @Override
-    public String name() {
-        return name;
-    }
 
-    @Override
-    public String htmlUrl() {
-        return htmlUrl;
-    }
-
-    @Override
-    public Boolean archived() {
-        return archived;
-    }
+@Data
+public final class GithubRepositoryDefinition {
+    private String name;
+    @JsonProperty("html_url")
+    private String htmlUrl;
+    private Boolean archived;
 }

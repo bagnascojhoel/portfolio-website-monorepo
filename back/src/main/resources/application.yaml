@@ -1,4 +1,5 @@
 server:
+  port: 8080
   servlet.context-path: /api
   tomcat:
     threads:
@@ -9,8 +10,8 @@ project:
     initial-delay:
       load-projects: PT5S
     fixed-delay:
-      load-projects: PT6H
-      evict-projects: PT6H
+      load-projects: PT6H6S
+      evict-projects: PT6H5S
   cache:
     enabled: true
   github:

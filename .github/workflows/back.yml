@@ -44,7 +44,7 @@ jobs:
 
       - name: Build image
         working-directory: back
-        run: ./gradlew build bootJar buildDockerImage
+        run: ./gradlew nativeCompileDocker
      
       - name: Deploy to fly.io
         working-directory: back

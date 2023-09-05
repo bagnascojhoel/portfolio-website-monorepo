@@ -5,6 +5,7 @@ import br.com.bagnascojhoel.portfolio_website_bff.model.ProjectDescription;
 import br.com.bagnascojhoel.portfolio_website_bff.model.dao.github.GithubAuthentication;
 import br.com.bagnascojhoel.portfolio_website_bff.model.dao.github.GithubQueryParams;
 import br.com.bagnascojhoel.portfolio_website_bff.model.dao.github.GithubUriBuilder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -77,7 +78,7 @@ public class ProjectDao {
 
         var response = restTemplate.exchange(requestEntity, GithubRepositoryDefinition[].class);
         return Arrays.stream(Objects.requireNonNull(response.getBody()))
-                .filter(repo -> repo.archived() == null || !repo.archived())
+                .filter(repo -> !repo.getArchived())
                 .collect(Collectors.toList());
     }
 
@@ -99,15 +100,15 @@ public class ProjectDao {
 
     private Mono<GithubRepositoryContentResponse> callGetProjectDescription(GithubRepositoryDefinition definition) {
         var url = githubUriBuilder.withPath(GITHUB_DESCRIPTION_FILE_PATH)
-                .build(githubUsername, definition.name(), githubProjectDescriptionFile);
+                .build(githubUsername, definition.getName(), githubProjectDescriptionFile);
         var installationToken = githubAuthentication.generateAuthenticationToken();
 
         return webClient.get().uri(url)
                 .header(AUTHORIZATION, "Bearer " + installationToken)
                 .exchangeToMono(response -> response.bodyToMono(GithubRepositoryContentResponse.class))
                 .map(responseBody -> {
-                    responseBody.setName(definition.name());
-                    responseBody.setHtmlUrl(definition.htmlUrl());
+                    responseBody.setName(definition.getName());
+                    responseBody.setHtmlUrl(definition.getHtmlUrl());
                     return responseBody;
                 })
                 .onErrorResume(WebClientResponseException.class, webClientResponseException -> {
@@ -130,7 +131,9 @@ public class ProjectDao {
     @AllArgsConstructor
     public static class GithubRepositoryContentResponse {
         private String content;
+        @JsonIgnore
         private String name;
+        @JsonIgnore
         private String htmlUrl;
     }
 }

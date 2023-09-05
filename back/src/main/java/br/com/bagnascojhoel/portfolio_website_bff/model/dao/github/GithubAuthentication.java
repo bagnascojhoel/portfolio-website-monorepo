@@ -5,6 +5,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.Nullable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
@@ -145,10 +148,19 @@ public class GithubAuthentication {
         }
     }
 
-    private record UserInstallation(String id) {
+    @Data
+    public static class UserInstallation {
+        private String id;
     }
 
-    private record InstallationAccessToken(@Nullable String token, @JsonProperty("expires_at") Instant expiresAt) {
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class InstallationAccessToken {
+        @Nullable
+        private String token;
+        @JsonProperty("expires_at")
+        private Instant expiresAt;
 
         public static InstallationAccessToken createExpired() {
             return new InstallationAccessToken(null, Instant.MIN);

@@ -18,13 +18,16 @@ import java.util.stream.Collectors;
 @Controller
 @RequiredArgsConstructor
 public class ProjectsController {
+
+    private static final int NUMBER_OF_REPOSITORIES_TO_FETCH = 30;
+
     private final ProjectDao projectDao;
 
     @Scheduled(initialDelayString = "${project.scheduling.initial-delay.load-projects}",
             fixedDelayString = "${project.scheduling.fixed-delay.load-projects}")
     @Cacheable("projects")
     public Set<Project> getMyProjects() {
-        List<GithubRepositoryDefinition> githubRepositories = projectDao.getGithubRepositories(30);
+        List<GithubRepositoryDefinition> githubRepositories = projectDao.getGithubRepositories(NUMBER_OF_REPOSITORIES_TO_FETCH);
         Flux<ProjectDescription> flux = projectDao.getProjectsDescription(githubRepositories);
 
         return flux.map(projectDescription -> Project.builder()
