@@ -35,11 +35,11 @@ jobs:
         with:
           java-version: 17
 
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: temurin
-          java-version: 17
+      # - name: Setup Java
+      #   uses: actions/setup-java@v3
+      #   with:
+      #     distribution: temurin
+      #     java-version: 17
 
       - name: Setup fly
         uses: superfly/flyctl-actions/setup-flyctl@master
