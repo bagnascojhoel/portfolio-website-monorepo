@@ -115,6 +115,15 @@
   padding: 10px;
 }
 
+.notion-property-checkbox-unchecked {
+  border-color: var(--primary);
+}
+
+.notion-property-checkbox-checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
 /* only target safari */
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   _::-webkit-full-page-media,
