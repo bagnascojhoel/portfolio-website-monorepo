@@ -16,7 +16,7 @@ export const PageHead: React.FC<
 > = ({ site, title, description, pageId, image, url }) => {
   const rssFeedUrl = `${config.host}/feed`
 
-  if (title) {
+  if (title && pageId !== getSiteConfig('rootNotionPageId')) {
     title = `${title} | ${site?.name}`
   } else {
     title = site?.name 
