@@ -27,6 +27,10 @@
   color: var(--primary-variant);
 }
 
+.notion-page-title {
+
+}
+
 .index-page {
   --notion-max-width: 900px;
 }
@@ -233,10 +237,13 @@
   }
 }
 
+.notion-page-link {
+  transition: 100ms ease-in-out;
+}
+
 .notion-page-link:hover {
   background-color: inherit;
   transform: translateX(1ch);
-  transition: 100ms ease-in;
 }
 
 .notion-page-title-text {
