@@ -3,11 +3,12 @@
   const DESCRIPTION =
     "I'm a software developer from Brazil. Coding has been a passion of mine since I learned how a computer program is structured, back in 2015 at my technical course. From then, I've been improving my skills for web development in both front and back-end; I also have been working in the area since 2021.";
   const USERNAME = '@bagnascojhoel';
+  const BLOG_URL = 'https://blog.bagnascojhoel.com.br';
 </script>
 
 <section
   class="
-    mb-16 
+    mb-16
   "
 >
   <span class="text-primary-variant font-mono text-base">{USERNAME}</span>
@@ -15,9 +16,9 @@
     class="
       text-primary
       mb-5
-      leading-relaxed 
+      leading-relaxed
       font-mono
-      text-3xl 
+      text-3xl
       lg:text-5xl
       font-medium
     "
@@ -26,5 +27,9 @@
   </h1>
   <p class="text-base text-primary-variant max-w-3xl lg:max-w-lg">
     {DESCRIPTION}
+    <br />
+    <br />
+    If you want to know more about me,
+    <a href={BLOG_URL} target="_blank" class="underline">checkout my blog</a>.
   </p>
 </section>
