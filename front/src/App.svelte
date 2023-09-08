@@ -12,7 +12,7 @@
     rel="stylesheet"
   />
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.png" />
-  <title>@bagnascojhoel - Software Development</title>
+  <title>@bagnascojhoel | Software Development</title>
   <meta name="description" content="Software Development Portfolio" />
   <meta name="author" content="Jhoel Bagnasco" />
 </svelte:head>
