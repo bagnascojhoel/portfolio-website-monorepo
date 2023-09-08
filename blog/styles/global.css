@@ -20,6 +20,8 @@ body {
   --primary: #F97316;
   --primary-variant: #FB923C;
   --mono-font: "Fira Code", monospace;
+  --large-container-width: 1100px;
+
   font-family: var(--notion-font);
   overflow-x: hidden;
   background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDEyIiBoZWlnaHQ9IjYyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsPSIjRkI5MjNDIiBmaWxsLW9wYWNpdHk9Ii4xIiBkPSJtMzUzLjU5NiAwIDQ3LjAwOCAxMi41OTYtMTIuNTk2IDQ3LjAwN0wzNDEgNDcuMDA4ek0xMzEgMTU0LjE0MmwxMi41Ny0xMi41NyAxMi41NzIgMTIuNTctMTIuNTcxIDEyLjU3ek0zNzYgMzc1LjA5MyAzOTguNjc4IDM2MmwxMy4wOTMgMjIuNjc4LTIyLjY3OCAxMy4wOTN6TTE3LjMyIDQxOGwzMCAxNy4zMjEtMzAgMTcuMzJWNDE4Wk0zMTMuMzIxIDU3OWwzMCAxNy4zMjEtMzAgMTcuMzJWNTc5WiIvPjwvc3ZnPg==);
