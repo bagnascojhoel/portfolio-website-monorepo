@@ -1,0 +1,10 @@
+services:
+  structurizr:
+    container_name: structurizr-lite
+    image: structurizr/lite:latest
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/usr/local/structurizr
+    environment:
+      STRUCTURIZR_WORKSPACE_PATH: .
