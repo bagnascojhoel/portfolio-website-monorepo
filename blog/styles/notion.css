@@ -144,6 +144,7 @@
   font-style: italic;
   font-size: 1.2em;
   border-left: 4px solid var(--primary);
+  margin: 20px 0;
 }
 
 .notion-h1,
