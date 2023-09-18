@@ -227,6 +227,10 @@
   max-width: var(--large-container-width) !important;
   border-radius: 5px;
   box-shadow: none;
+  border: none;
+  }
+  
+  .notion-page-cover-wrapper img {
   border: 1px solid var(--primary-variant) !important;
 }
 
