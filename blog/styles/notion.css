@@ -42,6 +42,7 @@
 
 .notion-asset-caption {
   text-align: center;
+  color: var(--primary-variant);
 }
 
 .notion-asset-wrapper {
@@ -230,7 +231,7 @@
   border: none;
   }
   
-  .notion-page-cover-wrapper img {
+.notion-page-cover-wrapper img {
   border: 1px solid var(--primary-variant) !important;
 }
 
