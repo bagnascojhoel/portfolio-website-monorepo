@@ -4,6 +4,9 @@ server:
   tomcat:
     threads:
       max: 5
+
+spring.banner.location: classpath:/startup-banner.txt
+
 project:
   scheduling:
     enabled: ${project.cache.enabled}
