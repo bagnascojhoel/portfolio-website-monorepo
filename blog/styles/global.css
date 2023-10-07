@@ -21,6 +21,8 @@ body {
   --primary-variant: #FB923C;
   --mono-font: "Fira Code", monospace;
   --large-container-width: 1100px;
+  --bg-color-0: var(--primary);
+  --fg-color-5:  var(--primary);
 
   font-family: var(--notion-font);
   overflow-x: hidden;
