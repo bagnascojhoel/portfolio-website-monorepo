@@ -11,13 +11,11 @@ This project is used as the backend for frontend of my portfolio website.
 ## Running Locally
 
 ```shell
-docker container run -v ~/workspaces/portfolio-website-monorepo/back:/resources -e PROJECT_GITHUB_PRIVATE_KEY_RESOURCE_PATH=file:/resources/bagnascojhoel-com-br.2023-08-21.private-key.der -p 8080:80 -p 9010:9010 portfolio-website-bff
+docker container run -v ~/workspaces/portfolio-website-monorepo/back:/resources -e PROJECT_GITHUB_PRIVATE_KEY_RESOURCE_PATH=file:/resources/bagnascojhoel-com-br.2023-08-21.private-key.der -p 8080:80 portfolio-website-bff
 ```
 
-```shell
-./gradlew -Pagent test
-
-```
+- The applications requires a GitHub private key. You can define one with
+  either `project.github.private-key-resource-path` or `project.github.private-key-base-64`.
 
 ## Issues Along the Way
 
