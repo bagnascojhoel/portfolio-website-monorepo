@@ -2,8 +2,6 @@ package br.com.bagnascojhoel.portfolio_website_bff.code;
 
 import org.mockserver.client.MockServerClient;
 import org.mockserver.model.Delay;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.TestComponent;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -16,27 +14,26 @@ import static org.mockserver.model.HttpResponse.response;
 import static org.mockserver.model.JsonBody.json;
 import static org.mockserver.model.Parameter.param;
 
-@TestComponent
 public final class GithubMockServer {
     private static final String MY_INSTALLATION_ID = "6125";
-    @Value("${project.github.host}")
-    private final String githubHost;
-    @Value("${project.github.username}")
+
     private final String githubUsername;
-    @Value("${project.github.project-description-file}")
+
     private final String githubFileName;
 
+    private final MockServerClient mockServerClient;
+
     public GithubMockServer(
-            @Value("${project.github.host}") String githubHost,
-            @Value("${project.github.username}") String githubUsername,
-            @Value("${project.github.project-description-file}") String githubFileName
+            String githubUsername,
+            String githubFileName,
+            MockServerClient mockServerClient
     ) {
-        this.githubHost = githubHost;
         this.githubUsername = githubUsername;
         this.githubFileName = githubFileName;
+        this.mockServerClient = mockServerClient;
     }
 
-    public void mockOkayUserInstallation(MockServerClient mockServerClient) {
+    public void mockOkayUserInstallation() {
         mockServerClient
                 .when(
                         request()
@@ -58,8 +55,8 @@ public final class GithubMockServer {
 
     }
 
-    public void mockOkayUserRepos(MockServerClient mockRestServiceServer) {
-        mockRestServiceServer
+    public void mockOkayUserRepos() {
+        mockServerClient
                 .when(
                         request()
                                 .withMethod("GET")
@@ -93,7 +90,7 @@ public final class GithubMockServer {
                 );
     }
 
-    public void mockOkayUserInstallationAccessTokens(MockServerClient mockServerClient) {
+    public void mockOkayUserInstallationAccessTokens() {
 
         var expiresAt = Instant.now().plus(10, ChronoUnit.MINUTES).toString();
 
@@ -119,7 +116,7 @@ public final class GithubMockServer {
     }
 
 
-    public void mockOkayProjectDescriptionFileRepository1(MockServerClient mockServerClient) {
+    public void mockOkayProjectDescriptionFileRepository1() {
         var encodedContent = Base64.getEncoder().encodeToString("""
                 {
                   "title": "Portfolio Website",
@@ -151,7 +148,7 @@ public final class GithubMockServer {
                 );
     }
 
-    public void mockOkayProjectDescriptionFileRepository2(MockServerClient mockServerClient) {
+    public void mockOkayProjectDescriptionFileRepository2() {
         var encodedContent = Base64.getEncoder().encodeToString("""
                 {
                   "title": "A Project",
@@ -183,7 +180,7 @@ public final class GithubMockServer {
                 );
     }
 
-    public void mockNotFoundProjectDescriptionFileRepository2(MockServerClient mockServerClient) {
+    public void mockNotFoundProjectDescriptionFileRepository2() {
         mockServerClient
                 .when(request()
                         .withMethod("GET")

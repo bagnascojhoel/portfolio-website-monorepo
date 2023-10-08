@@ -2,6 +2,7 @@ package br.com.bagnascojhoel.portfolio_website_bff.integration;
 
 import br.com.bagnascojhoel.portfolio_website_bff.PortfolioWebsiteBffApplication;
 import br.com.bagnascojhoel.portfolio_website_bff.code.GithubMockServer;
+import br.com.bagnascojhoel.portfolio_website_bff.code.TestSchedulingManager;
 import br.com.bagnascojhoel.portfolio_website_bff.controller.ProjectsController;
 import io.restassured.RestAssured;
 import org.json.JSONException;
@@ -24,7 +25,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import static io.restassured.RestAssured.get;
 
 @SpringBootTest(
-        classes = {PortfolioWebsiteBffApplication.class, GithubMockServer.class},
+        classes = {PortfolioWebsiteBffApplication.class, TestSchedulingManager.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = {
                 "project.github.host=localhost",
@@ -38,21 +39,34 @@ import static io.restassured.RestAssured.get;
 @EnableScheduling
 @MockServerTest
 public class ProjectsIntegrationTest {
+
     @LocalServerPort
     String port;
-    @Autowired
-    GithubMockServer githubMockServer;
+
     @SpyBean
     ProjectsController projectsController;
+
     @Value("${project.github.username}")
     String githubUsername;
 
+    @Value("${project.github.project-description-file}")
+    String githubProjectDescriptionFile;
+
+    @Autowired
+    TestSchedulingManager testSchedulingManager;
+
     MockServerClient mockServerClient;
+
+    GithubMockServer githubMockServer;
 
     @BeforeEach
     void beforeEach() {
         RestAssured.baseURI = "http://localhost:" + port + "/api";
+        while (!mockServerClient.hasStarted()) {
+        }
         mockServerClient.reset();
+        testSchedulingManager.allowSetupProjectCache();
+        githubMockServer = new GithubMockServer(githubUsername, githubProjectDescriptionFile, mockServerClient);
     }
 
     @Nested
@@ -60,11 +74,11 @@ public class ProjectsIntegrationTest {
     class GetProjects {
         @Test
         void shouldBeAllNonArchivedProjectsWhenNoErrors() throws JSONException {
-            githubMockServer.mockOkayUserInstallationAccessTokens(mockServerClient);
-            githubMockServer.mockOkayUserInstallation(mockServerClient);
-            githubMockServer.mockOkayUserRepos(mockServerClient);
-            githubMockServer.mockOkayProjectDescriptionFileRepository1(mockServerClient);
-            githubMockServer.mockOkayProjectDescriptionFileRepository2(mockServerClient);
+            githubMockServer.mockOkayUserInstallationAccessTokens();
+            githubMockServer.mockOkayUserInstallation();
+            githubMockServer.mockOkayUserRepos();
+            githubMockServer.mockOkayProjectDescriptionFileRepository1();
+            githubMockServer.mockOkayProjectDescriptionFileRepository2();
 
             var responseBody = get("/projects")
                     .then()
@@ -100,11 +114,11 @@ public class ProjectsIntegrationTest {
 
         @Test
         void shouldBeProjectsWithDescriptionWhenRepositoryDoesNotContainDescriptionFile() throws JSONException {
-            githubMockServer.mockOkayUserInstallationAccessTokens(mockServerClient);
-            githubMockServer.mockOkayUserInstallation(mockServerClient);
-            githubMockServer.mockOkayUserRepos(mockServerClient);
-            githubMockServer.mockOkayProjectDescriptionFileRepository1(mockServerClient);
-            githubMockServer.mockNotFoundProjectDescriptionFileRepository2(mockServerClient);
+            githubMockServer.mockOkayUserInstallationAccessTokens();
+            githubMockServer.mockOkayUserInstallation();
+            githubMockServer.mockOkayUserRepos();
+            githubMockServer.mockOkayProjectDescriptionFileRepository1();
+            githubMockServer.mockNotFoundProjectDescriptionFileRepository2();
 
             var responseBody = get("/projects")
                     .then()

@@ -5,9 +5,7 @@ import br.com.bagnascojhoel.portfolio_website_bff.model.Project;
 import br.com.bagnascojhoel.portfolio_website_bff.model.ProjectDescription;
 import br.com.bagnascojhoel.portfolio_website_bff.model.dao.ProjectDao;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
 
@@ -23,8 +21,6 @@ public class ProjectsController {
 
     private final ProjectDao projectDao;
 
-    @Scheduled(initialDelayString = "${project.scheduling.initial-delay.load-projects}",
-            fixedDelayString = "${project.scheduling.fixed-delay.load-projects}")
     @Cacheable("projects")
     public Set<Project> getMyProjects() {
         List<GithubRepositoryDefinition> githubRepositories = projectDao.getGithubRepositories(NUMBER_OF_REPOSITORIES_TO_FETCH);
@@ -42,8 +38,4 @@ public class ProjectsController {
                 .block();
     }
 
-    @Scheduled(fixedDelayString = "${project.scheduling.fixed-delay.evict-projects}")
-    @CacheEvict(value = "projects", allEntries = true)
-    protected void evictCache() {
-    }
 }

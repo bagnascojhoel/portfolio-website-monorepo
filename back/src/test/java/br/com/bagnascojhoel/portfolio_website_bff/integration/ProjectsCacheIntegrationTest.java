@@ -2,6 +2,7 @@ package br.com.bagnascojhoel.portfolio_website_bff.integration;
 
 import br.com.bagnascojhoel.portfolio_website_bff.PortfolioWebsiteBffApplication;
 import br.com.bagnascojhoel.portfolio_website_bff.code.GithubMockServer;
+import br.com.bagnascojhoel.portfolio_website_bff.code.TestSchedulingManager;
 import br.com.bagnascojhoel.portfolio_website_bff.controller.ProjectsController;
 import io.restassured.RestAssured;
 import org.assertj.core.api.Assertions;
@@ -29,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @SpringBootTest(
-        classes = {PortfolioWebsiteBffApplication.class, GithubMockServer.class},
+        classes = {PortfolioWebsiteBffApplication.class, TestSchedulingManager.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = {
                 "project.github.host=localhost",
@@ -46,23 +47,37 @@ import static org.awaitility.Awaitility.await;
 @EnableScheduling
 @MockServerTest
 public class ProjectsCacheIntegrationTest {
+
     @LocalServerPort
     String port;
-    @Autowired
-    GithubMockServer githubMockServer;
+
     @Autowired
     CacheManager cacheManager;
+
     @SpyBean
     ProjectsController projectsController;
+
     @Value("${project.github.username}")
     String githubUsername;
 
+    @Value("${project.github.project-description-file}")
+    String githubProjectDescriptionFile;
+
+    @Autowired
+    TestSchedulingManager testSchedulingManager;
+
     MockServerClient mockServerClient;
+
+    GithubMockServer githubMockServer;
 
     @BeforeEach
     void beforeEach() {
         RestAssured.baseURI = "http://localhost:" + port + "/api";
+        while (!mockServerClient.hasStarted()) {
+        }
         mockServerClient.reset();
+        testSchedulingManager.allowSetupProjectCache();
+        githubMockServer = new GithubMockServer(githubUsername, githubProjectDescriptionFile, mockServerClient);
     }
 
     @Nested
@@ -70,11 +85,11 @@ public class ProjectsCacheIntegrationTest {
     class GetProjects {
         @Test
         void shouldBeUsingCacheWhenCacheIsEnabled() throws InterruptedException {
-            githubMockServer.mockOkayUserInstallationAccessTokens(mockServerClient);
-            githubMockServer.mockOkayUserInstallation(mockServerClient);
-            githubMockServer.mockOkayUserRepos(mockServerClient);
-            githubMockServer.mockOkayProjectDescriptionFileRepository1(mockServerClient);
-            githubMockServer.mockOkayProjectDescriptionFileRepository2(mockServerClient);
+            githubMockServer.mockOkayUserInstallationAccessTokens();
+            githubMockServer.mockOkayUserInstallation();
+            githubMockServer.mockOkayUserRepos();
+            githubMockServer.mockOkayProjectDescriptionFileRepository1();
+            githubMockServer.mockOkayProjectDescriptionFileRepository2();
 
             cacheManager.getCache("projects").clear();
             var timeForFirstRequest = get("/projects").then()
@@ -97,11 +112,11 @@ public class ProjectsCacheIntegrationTest {
 
         @Test
         void shouldBeUsingScheduling() {
-            githubMockServer.mockOkayUserInstallationAccessTokens(mockServerClient);
-            githubMockServer.mockOkayUserInstallation(mockServerClient);
-            githubMockServer.mockOkayUserRepos(mockServerClient);
-            githubMockServer.mockOkayProjectDescriptionFileRepository1(mockServerClient);
-            githubMockServer.mockOkayProjectDescriptionFileRepository2(mockServerClient);
+            githubMockServer.mockOkayUserInstallationAccessTokens();
+            githubMockServer.mockOkayUserInstallation();
+            githubMockServer.mockOkayUserRepos();
+            githubMockServer.mockOkayProjectDescriptionFileRepository1();
+            githubMockServer.mockOkayProjectDescriptionFileRepository2();
             await()
                     .atMost(Duration.TEN_SECONDS)
                     .untilAsserted(() -> Mockito.verify(projectsController).getMyProjects());
