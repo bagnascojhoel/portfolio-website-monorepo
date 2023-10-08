@@ -32,12 +32,6 @@ jobs:
         with:
           java-version: 17
 
-      # - name: Setup Java
-      #   uses: actions/setup-java@v3
-      #   with:
-      #     distribution: temurin
-      #     java-version: 17
-
       - name: Setup fly
         uses: superfly/flyctl-actions/setup-flyctl@master
       
@@ -46,7 +40,7 @@ jobs:
 
       - name: Build image
         working-directory: back
-        run: ./gradlew nativeCompileDocker
+        run: ./gradlew clean tracingAgentTest nativeCompileDocker
      
       - name: Deploy to fly.io
         working-directory: back
