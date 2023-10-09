@@ -2,9 +2,8 @@ name: Workflow for back
 
 on:
   push:
-    branches: ["main"]
-    paths: ["back/**"]
-
+    branches: ['main']
+    paths: ['back/**']
 
   workflow_dispatch:
 
@@ -14,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "flyio"
+  group: 'flyio'
   cancel-in-progress: true
 
 jobs:
@@ -23,7 +22,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -34,17 +33,20 @@ jobs:
 
       - name: Setup fly
         uses: superfly/flyctl-actions/setup-flyctl@master
-      
+
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Clean Gradle cache
+        working-directory: back
+        run: ./gradlew clean
+
       - name: Build image
         working-directory: back
-        run: ./gradlew clean tracingAgentTest nativeCompileDocker
-     
+        run: ./gradlew tracingAgentTest nativeCompileDocker
+
       - name: Deploy to fly.io
         working-directory: back
         run: flyctl deploy --local-only --auto-confirm
-        env: 
+        env:
           FLY_API_TOKEN: ${{ secrets.FLY_DEPLOY_SECRET }}
-
