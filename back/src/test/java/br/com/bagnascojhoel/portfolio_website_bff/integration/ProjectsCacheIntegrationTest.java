@@ -5,6 +5,7 @@ import br.com.bagnascojhoel.portfolio_website_bff.code.GithubMockServer;
 import br.com.bagnascojhoel.portfolio_website_bff.code.TestSchedulingManager;
 import br.com.bagnascojhoel.portfolio_website_bff.controller.ProjectsController;
 import io.restassured.RestAssured;
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.awaitility.Duration;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,6 +47,7 @@ import static org.awaitility.Awaitility.await;
 @AutoConfigureCache
 @EnableScheduling
 @MockServerTest
+@Slf4j
 public class ProjectsCacheIntegrationTest {
 
     @LocalServerPort
@@ -75,6 +77,7 @@ public class ProjectsCacheIntegrationTest {
         RestAssured.baseURI = "http://localhost:" + port + "/api";
         while (!mockServerClient.hasStarted()) {
         }
+        log.info("mock server client has started");
         mockServerClient.reset();
         testSchedulingManager.allowSetupProjectCache();
         githubMockServer = new GithubMockServer(githubUsername, githubProjectDescriptionFile, mockServerClient);
