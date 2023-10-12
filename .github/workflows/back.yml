@@ -37,13 +37,13 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Clean Gradle cache
+      - name: Gradle build source
         working-directory: back
-        run: ./gradlew clean
+        run: ./gradlew clean build
 
-      - name: Build image
+      - name: Gradle build Docker image
         working-directory: back
-        run: ./gradlew tracingAgentTest nativeCompileDocker
+        run: ./gradlew nativeCompileDocker
 
       - name: Deploy to fly.io
         working-directory: back
