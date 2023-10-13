@@ -70,10 +70,6 @@ tasks.named('processTestAot') {
     enabled = false
 }
 
-tasks.named('processAot') {
-    enabled = false
-}
-
 tasks.named('build') {
     dependsOn clean
 }
