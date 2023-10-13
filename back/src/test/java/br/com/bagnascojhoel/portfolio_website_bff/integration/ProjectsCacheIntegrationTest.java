@@ -8,10 +8,7 @@ import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.awaitility.Duration;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.mockserver.client.MockServerClient;
 import org.mockserver.springtest.MockServerTest;
@@ -71,6 +68,16 @@ public class ProjectsCacheIntegrationTest {
     MockServerClient mockServerClient;
 
     GithubMockServer githubMockServer;
+
+    @BeforeAll
+    static void beforeAll() {
+        log.info("testing cache integration test");
+    }
+
+    @AfterAll
+    static void afterAll() {
+        log.info("ended cache integration test");
+    }
 
     @BeforeEach
     void beforeEach() {
