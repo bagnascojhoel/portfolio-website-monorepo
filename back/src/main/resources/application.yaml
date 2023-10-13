@@ -24,6 +24,6 @@ project:
     username: bagnascojhoel
     app-id: 375399
 
-logging:
-  level:
-    root: DEBUG
+#logging:
+#  level:
+#    root: DEBUG
