@@ -1,28 +1,28 @@
 <script lang="ts">
-  import type Theme from '@model/Theme';
-  import { getContext } from 'svelte';
-  import ContactsSection from './nested/ContactsSection.svelte';
-  import HighlightedFooter from './nested/HighlightedFooter.svelte';
-  import IntroductionSection from './nested/IntroductionSection.svelte';
-  import ProjectsPanel from './nested/ProjectsPanel.svelte';
-  import ShowProjectsButton from './nested/ShowProjectsButton.svelte';
+    import ContactsSection from './nested/ContactsSection.svelte';
+    import HighlightedFooter from './nested/HighlightedFooter.svelte';
+    import IntroductionSection from './nested/IntroductionSection.svelte';
+    import ProjectsPanel from './nested/ProjectsPanel.svelte';
+    import ShowProjectsButton from './nested/ShowProjectsButton.svelte';
+    import type Theme from '@model/Theme';
+    import { getContext } from 'svelte';
 
-  const theme: Theme = getContext('Theme');
+    const theme: Theme = getContext('Theme');
 
-  let innerWidth = window.innerWidth;
-  $: isMobileScreen = innerWidth < theme.getScreenValue('lg');
+    let innerWidth = window.innerWidth;
+    $: isMobileScreen = innerWidth < theme.getScreenValue('lg');
 
-  let showProjectsPanel = false;
-  function handleShowProjectsPanelSwitch() {
-    showProjectsPanel = !showProjectsPanel;
-  }
+    let showProjectsPanel = false;
+    function handleShowProjectsPanelSwitch() {
+        showProjectsPanel = !showProjectsPanel;
+    }
 </script>
 
 <svelte:window bind:innerWidth />
 
 <div class="min-h-screen bg-color-background bg-geometric-pattern">
-  <main
-    class="
+    <main
+        class="
       flex
       flex-col
       items-center
@@ -36,18 +36,20 @@
       2xl:pt-72
       px-6
       relative"
-  >
-    <IntroductionSection />
-    {#if isMobileScreen}
-      <ShowProjectsButton on:showProjects={handleShowProjectsPanelSwitch} />
-    {/if}
-    <ContactsSection />
-    <ProjectsPanel
-      isOpen={showProjectsPanel || !isMobileScreen}
-      disableClose={!isMobileScreen}
-      on:close={handleShowProjectsPanelSwitch}
-    />
-  </main>
+    >
+        <IntroductionSection />
+        {#if isMobileScreen}
+            <ShowProjectsButton
+                on:showProjects={handleShowProjectsPanelSwitch}
+            />
+        {/if}
+        <ContactsSection />
+        <ProjectsPanel
+            isOpen={showProjectsPanel || !isMobileScreen}
+            disableClose={!isMobileScreen}
+            on:close={handleShowProjectsPanelSwitch}
+        />
+    </main>
 
-  <HighlightedFooter />
+    <HighlightedFooter />
 </div>

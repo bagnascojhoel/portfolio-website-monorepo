@@ -1,31 +1,31 @@
 <script lang="ts">
-  import { onMount, getContext, createEventDispatcher } from 'svelte';
-  import type ProjectService from '@model/ProjectService';
-  import type Project from '@model/Project';
-  import type { Colors } from '@model/Theme';
-  import type Theme from '@model/Theme';
-  import ProjectCard from '@components/ProjectCard.svelte';
-  import Icon from '@components/Icon.svelte';
-  import ProjectCardSkeleton from '@components/ProjectCardSkeleton.svelte';
+    import Icon from '@components/Icon.svelte';
+    import ProjectCard from '@components/ProjectCard/ProjectCard.svelte';
+    import ProjectCardSkeleton from '@components/ProjectCard/ProjectCardSkeleton.svelte';
+    import type Project from '@model/Project';
+    import type ProjectService from '@model/ProjectService';
+    import type { Colors } from '@model/Theme';
+    import type Theme from '@model/Theme';
+    import { onMount, getContext, createEventDispatcher } from 'svelte';
 
-  const projectService: ProjectService = getContext('ProjectService');
-  const theme: Theme = getContext('Theme');
-  const colors: Colors = theme.colors;
-  const dispatch = createEventDispatcher();
-  let projects: Project[] = [];
-  export let isOpen: boolean = true;
-  export let disableClose: boolean = false;
-  $: isLoading = projects.length === 0;
+    const projectService: ProjectService = getContext('ProjectService');
+    const theme: Theme = getContext('Theme');
+    const colors: Colors = theme.colors;
+    const dispatch = createEventDispatcher();
+    let projects: Project[] = [];
+    export let isOpen: boolean = true;
+    export let disableClose: boolean = false;
+    $: isLoading = projects.length === 0;
 
-  onMount(loadProjects);
+    onMount(loadProjects);
 
-  async function loadProjects() {
-    projects = await projectService.findAll();
-  }
+    async function loadProjects() {
+        projects = await projectService.findAll();
+    }
 </script>
 
 <aside
-  class="
+    class="
     fixed
     inset-0
     lg:left-[70%]
@@ -36,27 +36,27 @@
     ease-in-out
     duration-300
   "
-  style={isOpen ? 'transform: translateX(0);' : ''}
+    style={isOpen ? 'transform: translateX(0);' : ''}
 >
-  {#if !disableClose}
-    <nav class="p-2 pb-0 flex flex-row-reverse">
-      <button on:click={() => dispatch('close')}>
-        <Icon name="close" size={50} color={colors['on-primary']} />
-      </button>
-    </nav>
-  {/if}
-  <div class="p-2 divide-y-8 divide-primary">
-    {#if isLoading}
-      <ProjectCardSkeleton isOpen />
-      <ProjectCardSkeleton />
-      <ProjectCardSkeleton />
-      <ProjectCardSkeleton />
-      <ProjectCardSkeleton />
-      <ProjectCardSkeleton />
-    {:else}
-      {#each projects as project, i}
-        <ProjectCard {project} isOpen={i === 0} />
-      {/each}
+    {#if !disableClose}
+        <nav class="p-2 pb-0 flex flex-row-reverse">
+            <button on:click={() => dispatch('close')}>
+                <Icon name="close" size={50} color={colors['on-primary']} />
+            </button>
+        </nav>
     {/if}
-  </div>
+    <div class="p-2 divide-y-8 divide-primary">
+        {#if isLoading}
+            <ProjectCardSkeleton isOpen />
+            <ProjectCardSkeleton />
+            <ProjectCardSkeleton />
+            <ProjectCardSkeleton />
+            <ProjectCardSkeleton />
+            <ProjectCardSkeleton />
+        {:else}
+            {#each projects as project, i}
+                <ProjectCard {project} isOpen={i === 0} />
+            {/each}
+        {/if}
+    </div>
 </aside>
