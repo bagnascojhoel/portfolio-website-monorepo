@@ -4,7 +4,7 @@
     import IntroductionSection from './nested/IntroductionSection.svelte';
     import ProjectsPanel from './nested/ProjectsPanel.svelte';
     import ShowProjectsButton from './nested/ShowProjectsButton.svelte';
-    import type Theme from '@model/Theme';
+    import type Theme from '@domain/Theme';
     import { getContext } from 'svelte';
 
     const theme: Theme = getContext('Theme');

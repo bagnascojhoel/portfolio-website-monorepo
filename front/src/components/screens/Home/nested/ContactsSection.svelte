@@ -6,7 +6,7 @@
     } from './contact-info';
     import CaptionOnHover from '@components/CaptionOnHover.svelte';
     import Icon from '@components/Icon.svelte';
-    import type Theme from '@model/Theme';
+    import type Theme from '@domain/Theme';
     import { getContext } from 'svelte';
 
     const { colors }: Theme = getContext('Theme');

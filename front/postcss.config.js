@@ -1,8 +1,8 @@
 module.exports = {
-  plugins: {
-    tailwindcss: {
-      config: './src/infra/configurations/TailwindConfiguration.js',
+    plugins: {
+        tailwindcss: {
+            config: './src/infrastructure/tailwind-configuration.js',
+        },
+        autoprefixer: {},
     },
-    autoprefixer: {},
-  },
 };

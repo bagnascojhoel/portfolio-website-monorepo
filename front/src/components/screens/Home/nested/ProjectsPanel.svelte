@@ -2,10 +2,10 @@
     import Icon from '@components/Icon.svelte';
     import ProjectCard from '@components/ProjectCard/ProjectCard.svelte';
     import ProjectCardSkeleton from '@components/ProjectCard/ProjectCardSkeleton.svelte';
-    import type Project from '@model/Project';
-    import type ProjectService from '@model/ProjectService';
-    import type { Colors } from '@model/Theme';
-    import type Theme from '@model/Theme';
+    import type Project from '@domain/Project';
+    import type ProjectService from '@domain/ProjectService';
+    import type { Colors } from '@domain/Theme';
+    import type Theme from '@domain/Theme';
     import { onMount, getContext, createEventDispatcher } from 'svelte';
 
     const projectService: ProjectService = getContext('ProjectService');
