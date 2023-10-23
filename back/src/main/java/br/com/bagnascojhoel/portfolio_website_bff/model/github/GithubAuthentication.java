@@ -1,6 +1,6 @@
-package br.com.bagnascojhoel.portfolio_website_bff.model.dao.github;
+package br.com.bagnascojhoel.portfolio_website_bff.model.github;
 
-import br.com.bagnascojhoel.portfolio_website_bff.model.exception.UnrecoverableError;
+import br.com.bagnascojhoel.portfolio_website_bff.model.UnrecoverableError;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.annotation.JsonProperty;

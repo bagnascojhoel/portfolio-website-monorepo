@@ -1,4 +1,4 @@
-package br.com.bagnascojhoel.portfolio_website_bff.model.scheduling;
+package br.com.bagnascojhoel.portfolio_website_bff.model.scheduling_manager;
 
 import org.springframework.stereotype.Component;
 

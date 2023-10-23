@@ -2,6 +2,7 @@ package br.com.bagnascojhoel.portfolio_website_bff.code;
 
 import org.mockserver.client.MockServerClient;
 import org.mockserver.model.Delay;
+import org.mockserver.model.MediaType;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -45,6 +46,7 @@ public final class GithubMockServer {
                 .respond(
                         response()
                                 .withStatusCode(200)
+                                .withContentType(MediaType.JSON_UTF_8)
                                 .withBody(json("""
                                         {
                                           "id": {installationId}
@@ -67,22 +69,32 @@ public final class GithubMockServer {
                 .respond(
                         response()
                                 .withStatusCode(200)
+                                .withContentType(MediaType.JSON_UTF_8)
                                 .withBody(json("""
                                         [
                                             {
                                                 "name": "repository-1",
                                                 "html_url": "https://github.com/{username}/repository-1",
-                                                "archived": false
+                                                "archived": false,
+                                                "topics": [],
+                                                "description": null,
+                                                "pushed_at": "2023-10-12T10:10:00Z"
                                             },
                                             {
                                                 "name": "repository-2",
                                                 "html_url": "https://github.com/{username}/repository-2",
-                                                "archived": false
+                                                "archived": false,
+                                                "topics": ["java"],
+                                                "description": "This is my default description",
+                                                "pushed_at": "2023-10-10T11:11:59Z"
                                             },
                                             {
                                                 "name": "repository-3",
                                                 "html_url": "https://github.com/{username}/repository-3",
-                                                "archived": true
+                                                "archived": true,
+                                                "topics": [],
+                                                "description": "",
+                                                "pushed_at": "2023-10-21T02:28:06Z"
                                             }
                                         ]
                                         """.replace("{username}", githubUsername))
@@ -122,7 +134,9 @@ public final class GithubMockServer {
                   "title": "Portfolio Website",
                   "tags": ["frontend", "backend", "java", "svelte"],
                   "description": "This is my portfolio website.",
-                  "websiteUrl": "https://my-website.com"
+                  "websiteUrl": "https://my-website.com",
+                  "complexity": "HIGH",
+                  "startsOpen": true
                 }""".getBytes(StandardCharsets.UTF_8));
 
         mockServerClient
@@ -152,8 +166,7 @@ public final class GithubMockServer {
         var encodedContent = Base64.getEncoder().encodeToString("""
                 {
                   "title": "A Project",
-                  "tags": ["backend",  "docker"],
-                  "description": "Checkout-less ecommerce."
+                  "tags": ["backend",  "docker"]
                 }
                 """.getBytes(StandardCharsets.UTF_8));
 

@@ -1,6 +1,6 @@
 package br.com.bagnascojhoel.portfolio_website_bff.code;
 
-import br.com.bagnascojhoel.portfolio_website_bff.model.dao.github.GithubMediaTypes;
+import br.com.bagnascojhoel.portfolio_website_bff.model.github.GithubMediaTypes;
 import org.mockserver.model.BodyWithContentType;
 import org.mockserver.model.JsonBody;
 import org.mockserver.model.MediaType;

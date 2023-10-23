@@ -95,14 +95,26 @@ public class ProjectsIntegrationTest {
                                             "description": "This is my portfolio website.",
                                             "tags": ["frontend", "backend", "java", "svelte"],
                                             "repositoryUrl": "https://github.com/{username}/repository-1",
-                                            "websiteUrl": "https://my-website.com"
+                                            "websiteUrl": "https://my-website.com",
+                                            "startsOpen": true,
+                                            "complexity": {
+                                                "code": "complexity-high",
+                                                "text": "High"
+                                            },
+                                            "lastChangedDateTime": "2023-10-12T10:10:00Z"
                                         },
                                         {
                                             "uniqueName": "repository-2",
                                             "title": "A Project",
-                                            "description": "Checkout-less ecommerce.",
-                                            "tags": ["backend", "docker"],
-                                            "repositoryUrl": "https://github.com/{username}/repository-2"
+                                            "description": "This is my default description",
+                                            "tags": ["backend", "docker", "java"],
+                                            "repositoryUrl": "https://github.com/{username}/repository-2",
+                                            "startsOpen": false,
+                                            "complexity": {
+                                                "code": "complexity-medium",
+                                                "text": "Medium"
+                                            },
+                                            "lastChangedDateTime": "2023-10-10T11:11:59Z"
                                         }
                                     ]
                                 }
@@ -136,7 +148,13 @@ public class ProjectsIntegrationTest {
                                             "description": "This is my portfolio website.",
                                             "tags": ["frontend", "backend", "java", "svelte"],
                                             "repositoryUrl": "https://github.com/{username}/repository-1",
-                                            "websiteUrl": "https://my-website.com"
+                                            "websiteUrl": "https://my-website.com",
+                                            "startsOpen": true,
+                                            "complexity": {
+                                                "code": "complexity-high",
+                                                "text": "High"
+                                            },
+                                            "lastChangedDateTime": "2023-10-12T10:10:00Z"
                                         }
                                     ]
                                 }

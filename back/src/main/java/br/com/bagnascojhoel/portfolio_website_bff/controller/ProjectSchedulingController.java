@@ -1,6 +1,6 @@
 package br.com.bagnascojhoel.portfolio_website_bff.controller;
 
-import br.com.bagnascojhoel.portfolio_website_bff.model.scheduling.SchedulingManager;
+import br.com.bagnascojhoel.portfolio_website_bff.model.scheduling_manager.SchedulingManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;

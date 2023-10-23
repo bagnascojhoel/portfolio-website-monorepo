@@ -1,4 +1,4 @@
-package br.com.bagnascojhoel.portfolio_website_bff.view;
+package br.com.bagnascojhoel.portfolio_website_bff.view.project;
 
 import br.com.bagnascojhoel.portfolio_website_bff.controller.ProjectsController;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package br.com.bagnascojhoel.portfolio_website_bff.model.dao.github;
+package br.com.bagnascojhoel.portfolio_website_bff.model.github;
 
 import org.springframework.http.MediaType;
 
