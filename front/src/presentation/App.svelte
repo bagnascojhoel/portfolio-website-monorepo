@@ -1,6 +1,5 @@
 <script lang="ts">
-    import HomeScreen from '@components/screens/Home/Home.svelte';
-    import ErrorToast from '@components/ErrorToast.svelte';
+    import HomeScreen from '@screens/Home/Home.svelte';
 </script>
 
 <svelte:head>
@@ -17,7 +16,6 @@
     <meta name="author" content="Jhoel Bagnasco" />
 </svelte:head>
 
-<ErrorToast />
 <HomeScreen />
 
 <style global lang="postcss">

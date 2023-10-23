@@ -6,8 +6,10 @@
         "resolveJsonModule": true,
         "baseUrl": "src",
         "paths": {
-            "@components/*": ["components/*"],
-            "@assets/*": ["assets/*"],
+            "@components/*": ["presentation/components/*"],
+            "@screens/*": ["presentation/screens/*"],
+            "@assets/*": ["presentation/assets/*"],
+            "@application/*": ["application/*"],
             "@domain/*": ["domain/*"],
             "@infrastructure/*": ["infrastructure/*"]
         }

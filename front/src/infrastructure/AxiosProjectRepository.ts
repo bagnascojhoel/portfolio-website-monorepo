@@ -1,7 +1,7 @@
-import type BffAxiosClient from '@infrastructure/AxiosClient';
+import type { AxiosClient } from '@infrastructure/AxiosClient';
 import type { Project } from '@domain/Project';
-import type ProjectService from '@domain/ProjectService';
-import type UnrecoverableError from '@domain/UnrecoverableError';
+import type { ProjectRepository } from '@domain/ProjectRepository';
+import UnrecoverableError from '@domain/UnrecoverableError';
 
 type ProjectsDto = {
     projects: ProjectDto[];
@@ -16,10 +16,10 @@ type ProjectDto = {
     websiteUrl?: string;
 };
 
-export default class AxiosProjectService implements ProjectService {
-    private readonly httpClient: BffAxiosClient;
+export default class AxiosProjectRepository implements ProjectRepository {
+    private readonly httpClient: AxiosClient;
 
-    constructor(httpClient: BffAxiosClient) {
+    constructor(httpClient: AxiosClient) {
         this.httpClient = httpClient;
     }
 

@@ -9,7 +9,7 @@ class DefaultRequestConfig {
     useGlobalErrorHandler?: boolean = true;
 }
 
-export default class AxiosClient {
+export class AxiosClient {
     private readonly axios: AxiosInstance;
 
     constructor(axios: AxiosInstance) {

@@ -1,16 +1,21 @@
 import axios from 'axios';
-import App from './App.svelte';
+import App from './presentation/App.svelte';
+import { ProjectApplicationService } from '@application/ProjectApplicationService';
 
-import AxiosClient from '@infrastructure/AxiosClient';
+import { AxiosClient } from '@infrastructure/AxiosClient';
 import TailwindThemeConfiguration from '@infrastructure/TailwindThemeConfiguration';
-import AxiosProjectService from '@infrastructure/AxiosProjectService';
+import AxiosProjectRepository from '@infrastructure/AxiosProjectRepository';
 
 const bffClient = new AxiosClient(
     axios.create({ baseURL: process.env.API_BASE_URL }),
 );
 
 const context = new Map();
-context.set('ProjectService', new AxiosProjectService(bffClient));
+const projectRepository = new AxiosProjectRepository(bffClient);
+context.set(
+    'ProjectApplicationService',
+    new ProjectApplicationService(projectRepository),
+);
 context.set('Theme', new TailwindThemeConfiguration().getTheme());
 
 const app = new App({
