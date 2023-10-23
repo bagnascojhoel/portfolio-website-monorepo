@@ -41,8 +41,7 @@
         "webpackbar": "^5.0.2"
     },
     "scripts": {
-        "dev:mock": "wp --config config/webpack.config.js --mode development --env local-mock",
-        "dev": "wp --config config/webpack.config.js --mode development --env local",
+        "dev": "wp --config config/webpack.config.js --mode development --env development",
         "up": "wp --config config/webpack.config.js --mode development --env production",
         "build": "wp --config config/webpack.config.js --mode production --env production",
         "build:analyze": "wp --config config/webpack.config.js --mode production --env production --analyze"

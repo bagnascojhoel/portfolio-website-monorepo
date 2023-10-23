@@ -191,16 +191,13 @@ exports.useWebpackBar = () => ({
 
 exports.useDotenv = (env) => {
     let envFilePath = 'development';
-
+    console.log(env);
     switch (env) {
         case 'production':
             envFilePath = 'env/production.env';
             break;
-        case 'local-mock':
-            envFilePath = 'env/local-mock.env';
-            break;
-        case 'local':
-            envFilePath = 'env/local.env';
+        case 'development':
+            envFilePath = 'env/development.env';
             break;
         default:
     }

@@ -1,0 +1,95 @@
+{
+  "uuid": "46d79753-fa03-4318-8bd9-5ab03649b173",
+  "lastMigration": 28,
+  "name": "Portfolio website bff",
+  "endpointPrefix": "api",
+  "latency": 0,
+  "port": 3001,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "d6b294ec-8ebc-4308-ae46-d3efde19a32f",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "projects",
+      "responses": [
+        {
+          "uuid": "3c9985b3-4f02-4054-9ee3-7ae0da867ac7",
+          "body": "{\n    \"projects\": [\n        {\n            \"title\": \"Mocked My Portfolio Website\",\n            \"description\": \"Front and backend of my portfolio website. It loads the projects I've configured directly from GitHub's API. I use GitHub Actions for my CI.\",\n            \"tags\": [\n                \"spring\",\n                \"svelte\",\n                \"github-api\",\n                \"java\",\n                \"flyio\",\n                \"mvc\",\n                \"fullstack\",\n                \"githubactions\",\n                \"tailwindcss\"\n            ],\n            \"repositoryUrl\": \"https://github.com/bagnascojhoel/portfolio-website-monorepo\",\n            \"websiteUrl\": null,\n            \"startsOpen\": false,\n            \"complexity\": {\n                \"code\": \"complexity-medium\",\n                \"text\": \"Medium\"\n            },\n            \"lastChangedDateTime\": \"2023-10-23T15:43:59Z\",\n            \"uniqueName\": \"portfolio-website-monorepo\"\n        },\n        {\n            \"title\": \"Data Structure and Algorithms\",\n            \"description\": \"My solutions for the exercices for the Data Structure and Algorithms course I made. Data structures like Stack, Queue, Map, Graph, Trie, and algorithms as Bubble Sort, QuickSort, Dijkstra Algorithm.\",\n            \"tags\": [\n                \"node\",\n                \"algorithms\",\n                \"course\",\n                \"javascript\"\n            ],\n            \"repositoryUrl\": \"https://github.com/bagnascojhoel/data-structure-and-algos\",\n            \"websiteUrl\": null,\n            \"startsOpen\": false,\n            \"complexity\": {\n                \"code\": \"complexity-medium\",\n                \"text\": \"Medium\"\n            },\n            \"lastChangedDateTime\": \"2023-10-18T18:49:28Z\",\n            \"uniqueName\": \"data-structure-and-algos\"\n        },\n        {\n            \"title\": \"Kwik Ecommerce API\",\n            \"description\": \"REST API for a Ecommerce. Written with Java 16, Spring Boot and MySQL database. It uses a H2 database and Liquibase scripts in YML to speed up automated tests.\",\n            \"tags\": [\n                \"rest\",\n                \"spring boot\",\n                \"java\",\n                \"spring security\",\n                \"back-end\",\n                \"docker\"\n            ],\n            \"repositoryUrl\": \"https://github.com/bagnascojhoel/kwik-ecommerce-api\",\n            \"websiteUrl\": null,\n            \"startsOpen\": false,\n            \"complexity\": {\n                \"code\": \"complexity-medium\",\n                \"text\": \"Medium\"\n            },\n            \"lastChangedDateTime\": \"2023-02-09T00:24:32Z\",\n            \"uniqueName\": \"kwik-ecommerce-api\"\n        },\n        {\n            \"title\": \"PoC Gradle with JPMS\",\n            \"description\": \"A PoC I made for a requirement of implementing Clean Architecture with Gradle in the most modular way possible.\",\n            \"tags\": [\n                \"gradle\",\n                \"java\",\n                \"clean architecture\",\n                \"back-end\"\n            ],\n            \"repositoryUrl\": \"https://github.com/bagnascojhoel/gradle-with-jpms\",\n            \"websiteUrl\": null,\n            \"startsOpen\": false,\n            \"complexity\": {\n                \"code\": \"complexity-medium\",\n                \"text\": \"Medium\"\n            },\n            \"lastChangedDateTime\": \"2023-10-18T18:51:41Z\",\n            \"uniqueName\": \"gradle-with-jpms\"\n        },\n        {\n            \"title\": \"NEditor\",\n            \"description\": \"A Rich Text Editor built with React and Slate\",\n            \"tags\": [\n                \"react\",\n                \"front-end\",\n                \"javascript\"\n            ],\n            \"repositoryUrl\": \"https://github.com/bagnascojhoel/neditor\",\n            \"websiteUrl\": null,\n            \"startsOpen\": false,\n            \"complexity\": {\n                \"code\": \"complexity-medium\",\n                \"text\": \"Medium\"\n            },\n            \"lastChangedDateTime\": \"2023-10-18T19:05:48Z\",\n            \"uniqueName\": \"neditor\"\n        },\n        {\n            \"title\": \"Clean Code & Clean Architecture Course\",\n            \"description\": \"Repo for code created while doing the course on Clean Code and Clean Architecture, mentored by Rodrigo Branas.\",\n            \"tags\": [\n                \"node\",\n                \"solid\",\n                \"ddd\",\n                \"tdd\",\n                \"design patterns\",\n                \"clean architecture\",\n                \"course\",\n                \"back-end\"\n            ],\n            \"repositoryUrl\": \"https://github.com/bagnascojhoel/clean-code-and-clean-architecture\",\n            \"websiteUrl\": null,\n            \"startsOpen\": false,\n            \"complexity\": {\n                \"code\": \"complexity-medium\",\n                \"text\": \"Medium\"\n            },\n            \"lastChangedDateTime\": \"2023-07-09T15:28:18Z\",\n            \"uniqueName\": \"clean-code-and-clean-architecture\"\n        },\n        {\n            \"title\": \"Shift Control APP\",\n            \"description\": \"It is my first attempt to code a React Native application. I use it to keep control of my daily working hours.\",\n            \"tags\": [\n                \"react native\",\n                \"typescript\",\n                \"expo\"\n            ],\n            \"repositoryUrl\": \"https://github.com/bagnascojhoel/shift-control\",\n            \"websiteUrl\": null,\n            \"startsOpen\": false,\n            \"complexity\": {\n                \"code\": \"complexity-medium\",\n                \"text\": \"Medium\"\n            },\n            \"lastChangedDateTime\": \"2023-10-18T19:07:45Z\",\n            \"uniqueName\": \"shift-control\"\n        }\n    ]\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id"
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "d6b294ec-8ebc-4308-ae46-d3efde19a32f"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "key": "",
+      "value": ""
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": []
+}
