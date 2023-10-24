@@ -1,7 +1,19 @@
 <script>
   const TITLE = 'Hey, I am Jhoel';
-  const DESCRIPTION =
-    "I'm a software developer from Brazil. Coding has been a passion of mine since I learned how a computer program is structured, back in 2015 at my technical course. From then, I've been improving my skills for web development in both front and back-end; I also have been working in the area since 2021.";
+  const DESCRIPTION_PART_1 = `
+  My interest in web development began with the front-end. I study and work 
+  on projects with various frameworks since my technical course. However,
+   as I've always been interested in development in general, my career 
+   eventually led me to the back-end.`;
+  const DESCRIPTION_PART_2 = `
+  I have been professionally working with Java and the Spring ecosystem 
+  for three years. During this time, I've gained experience in various 
+  application architectures and development best practices. These include 
+  Ports and Adapters, Domain-Driven Design, Behavior-Driven Development 
+  and other types of automated testing, continuous integration and delivery,
+   and system observability. Currently, I also have the opportunity to practice
+    my English on a daily basis, within a global team.
+  `;
   const USERNAME = '@bagnascojhoel';
   const BLOG_URL = 'https://blog.bagnascojhoel.com.br';
 </script>
@@ -25,11 +37,14 @@
   >
     {TITLE}
   </h1>
-  <p class="text-base text-primary-variant max-w-3xl lg:max-w-lg">
-    {DESCRIPTION}
-    <br />
-    <br />
-    If you want to know more about me,
-    <a href={BLOG_URL} target="_blank" rel="noreferrer" class="underline">checkout my blog</a>.
+  <p class="text-base text-primary-variant max-w-3xl lg:max-w-lg mt-2">
+    {DESCRIPTION_PART_1}
+  </p>
+  <p class="text-base text-primary-variant max-w-3xl lg:max-w-lg mt-2">
+    {DESCRIPTION_PART_2}
+  </p>
+  <p class="text-base text-primary-variant max-w-3xl lg:max-w-lg mt-5">
+    I also have a blog for some things I want to share. 
+    <a href={BLOG_URL} target="_blank" rel="noreferrer" class="underline">Checkout my blog</a>.
   </p>
 </section>

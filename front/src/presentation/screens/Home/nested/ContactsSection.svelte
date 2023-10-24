@@ -20,7 +20,7 @@
     }
 </script>
 
-<section class="mt-1 md:mt-24 lg:mt-0">
+<section class="mt-12 mb-24 md:mt-24 lg:mt-0">
     <ul class="mt-7 flex flex-col md:flex-row justify-center gap-4">
         <li>
             <a
