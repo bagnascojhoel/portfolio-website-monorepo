@@ -1,5 +1,3 @@
 {
-  "title": "My Portfolio Website",
-  "tags": ["fullstack", "mvc", "svelte", "tailwindcss", "java", "spring", "github-api"],
-  "description": "It uses a monorepo with continuous deployment by GitHub Actions. The projects are fetched through GitHub's API. So every new project I want to add to this website, I just add a description file into the repository of that project."
+  "title": "My Portfolio Website"
 }
