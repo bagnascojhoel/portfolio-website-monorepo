@@ -90,6 +90,7 @@ public class ProjectsIntegrationTest {
                                 {
                                     "projects": [
                                         {
+                                            "repositoryId": "repository-1",
                                             "uniqueName": "repository-1",
                                             "title": "Portfolio Website",
                                             "description": "This is my portfolio website.",
@@ -104,6 +105,7 @@ public class ProjectsIntegrationTest {
                                             "lastChangedDateTime": "2023-10-12T10:10:00Z"
                                         },
                                         {
+                                            "repositoryId": "repository-2",
                                             "uniqueName": "repository-2",
                                             "title": "A Project",
                                             "description": "This is my default description",
@@ -143,6 +145,7 @@ public class ProjectsIntegrationTest {
                                 {
                                     "projects": [
                                         {
+                                            "repositoryId": "repository-1",
                                             "uniqueName": "repository-1",
                                             "title": "Portfolio Website",
                                             "description": "This is my portfolio website.",

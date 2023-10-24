@@ -1,6 +1,7 @@
 package br.com.bagnascojhoel.portfolio_website_bff.model.project;
 
 import br.com.bagnascojhoel.portfolio_website_bff.model.extra_portfolio_description.Complexity;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.Nullable;
 import lombok.*;
@@ -40,4 +41,9 @@ public class Project {
 
     @NonNull
     private Instant lastChangedDateTime;
+
+    @JsonGetter("repositoryId")
+    public String getRepositoryId() {
+        return repositoryId;
+    }
 }
