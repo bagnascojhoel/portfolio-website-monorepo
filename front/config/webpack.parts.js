@@ -19,12 +19,8 @@ exports.copyAssets = () => ({
         new CopyWebpackPlugin({
             patterns: [
                 {
-                    from: 'src/assets/images',
+                    from: 'src/presentation/assets/images',
                     to: this.STATIC_FILES_PATH + '/assets/images',
-                },
-                {
-                    from: 'src/assets/mockServiceWorker.js',
-                    to: this.STATIC_FILES_PATH,
                 },
             ],
         }),

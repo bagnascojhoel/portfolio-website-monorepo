@@ -49,17 +49,17 @@
                 />
             </a>
         </li>
-        <li
-            on:click={() => copyToClipboard(EMAIL)}
-            class="hover:cursor-grab show-clipboard-copy"
-        >
-            <CaptionOnHover caption={EMAIL_CAPTION}>
-                <Icon
-                    name="gmail"
-                    color={colors['primary-variant']}
-                    label={EMAIL}
-                />
-            </CaptionOnHover>
+        <li>
+            <button on:click={() => copyToClipboard(EMAIL)}
+                class="hover:cursor-grab show-clipboard-copy">
+                <CaptionOnHover caption={EMAIL_CAPTION}>
+                    <Icon
+                        name="gmail"
+                        color={colors['primary-variant']}
+                        label={EMAIL}
+                    />
+                </CaptionOnHover>
+            </button>
         </li>
     </ul>
 </section>

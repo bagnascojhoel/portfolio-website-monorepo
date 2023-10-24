@@ -30,6 +30,6 @@
     <br />
     <br />
     If you want to know more about me,
-    <a href={BLOG_URL} target="_blank" class="underline">checkout my blog</a>.
+    <a href={BLOG_URL} target="_blank" rel="noreferrer" class="underline">checkout my blog</a>.
   </p>
 </section>
