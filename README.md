@@ -15,7 +15,11 @@ My personal portfolio website. The cards are built with information gathered fro
 
 ## Contributing
 
-This project uses conventional commits. The types currently allowed are:
+This project uses conventional commits.
+
+> Make sure to setup the githooks which will enforce this pattern on pre-commit.
+
+The types currently allowed are:
 
 - build: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
 - ci: Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)
@@ -27,7 +31,13 @@ This project uses conventional commits. The types currently allowed are:
 - style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
 - test: Adding missing tests or correcting existing tests
 
-> Make sure to setup the githooks which will enforce this pattern on pre-commit.
+The scopes allowed are:
+
+- bff: changes on `bff` folder
+- front: changes on `front` folder
+- blog: changes on `blog` folder
+- docs: changes on `docs` folder
+- all: changes that affect all applications
 
 ## Front-end
 
