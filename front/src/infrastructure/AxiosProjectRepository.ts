@@ -8,20 +8,24 @@ type ProjectsDto = {
 };
 
 type ProjectDto = {
-    uniqueName: string;
+    repositoryId: string;
     title: string;
     description: string;
     tags: string[];
     repositoryUrl: string;
     websiteUrl?: string;
+    startsOpen: boolean;
+    lastChangedDateTime: Date;
+    complexity: ComplexityDto;
+};
+
+type ComplexityDto = {
+    code: string;
+    text: string;
 };
 
 export default class AxiosProjectRepository implements ProjectRepository {
-    private readonly httpClient: AxiosClient;
-
-    constructor(httpClient: AxiosClient) {
-        this.httpClient = httpClient;
-    }
+    constructor(private readonly httpClient: AxiosClient) {}
 
     async findAll(): Promise<Project[]> {
         let response = await this.httpClient.get('/projects');
@@ -37,9 +41,10 @@ export default class AxiosProjectRepository implements ProjectRepository {
         }
 
         return responseBody.projects.map((dto) => ({
-            projectId: dto.uniqueName,
-            githubUrl: dto.repositoryUrl,
             ...dto,
+            projectId: dto.repositoryId,
+            githubUrl: dto.repositoryUrl,
+            lastChangedDateTime: new Date(dto.lastChangedDateTime),
         }));
     }
 }

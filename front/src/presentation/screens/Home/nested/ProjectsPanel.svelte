@@ -5,25 +5,44 @@
     import ProjectCard from '@components/ProjectCard/ProjectCard.svelte';
     import ProjectCardSkeleton from '@components/ProjectCard/ProjectCardSkeleton.svelte';
     
-    import type Project from '@domain/Project';
+    import {type Project, ComplexityCode} from '@domain/Project';
     import type { Colors } from '@domain/Theme';
     import type Theme from '@domain/Theme';
     
     import { onMount, getContext, createEventDispatcher } from 'svelte';
 
+    export let isOpen: boolean = true;
+    export let disableClose: boolean = false;
+
+    $: isLoading = projects.length === 0;
+
     const projectApplicationService: ProjectApplicationService = getContext('ProjectApplicationService');
     const theme: Theme = getContext('Theme');
     const colors: Colors = theme.colors;
     const dispatch = createEventDispatcher();
+    
+    
     let projects: Project[] = [];
-    export let isOpen: boolean = true;
-    export let disableClose: boolean = false;
-    $: isLoading = projects.length === 0;
-
-    onMount(loadProjects);
-
-    async function loadProjects() {
+    onMount(async () => {
         projects = await projectApplicationService.getProjects();
+        projects.sort(sortProjects)
+    });
+
+    function sortProjects(a: Project, b: Project): number {
+        const complexityValueForA = ComplexityCode[a.complexity.code] ?? ComplexityCode['complexity-medium'];
+        const complexityValueForB = ComplexityCode[b.complexity.code] ?? ComplexityCode['complexity-medium'];
+        
+        if (complexityValueForA > complexityValueForB) {
+            return -1;
+        } else if (complexityValueForA < complexityValueForB) {
+            return 1;
+        } else {
+            if (a.lastChangedDateTime.getTime() >= b.lastChangedDateTime.getTime()) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
     }
 </script>
 
@@ -58,7 +77,7 @@
             <ProjectCardSkeleton />
         {:else}
             {#each projects as project, i}
-                <ProjectCard {project} isOpen={i === 0} />
+                <ProjectCard {project} isOpen={project.startsOpen || i === 0} />
             {/each}
         {/if}
     </div>
