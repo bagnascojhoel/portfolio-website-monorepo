@@ -13,7 +13,6 @@
 
     const GITHUB_LABEL = 'github';
     const LINKEDIN_LABEL = 'linkedin';
-    const EMAIL_LABEL = 'email';
     const EMAIL_CAPTION = 'Copy to clipboard';
 
     function copyToClipboard(text: string) {
