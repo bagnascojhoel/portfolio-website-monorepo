@@ -21,7 +21,7 @@ public class RestExceptionHandlers extends DefaultHandlerExceptionResolver {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseDto> handleAnyException() {
+    public ResponseEntity<ErrorResponseDto> handleAnyException(final Exception exception) {
         final ErrorResponseDto body = ErrorResponseDto.builder()
                 .code("unknown-error")
                 .message("An unexpected error has happened.")

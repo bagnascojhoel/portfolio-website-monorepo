@@ -3,10 +3,11 @@ package br.com.bagnascojhoel.portfolio_website_bff.model.project;
 import br.com.bagnascojhoel.portfolio_website_bff.model.SkipProjectException;
 import br.com.bagnascojhoel.portfolio_website_bff.model.extra_portfolio_description.Complexity;
 import br.com.bagnascojhoel.portfolio_website_bff.model.extra_portfolio_description.ExtraPortfolioDescription;
-import br.com.bagnascojhoel.portfolio_website_bff.model.github.github_repository.GithubRepository;
+import br.com.bagnascojhoel.portfolio_website_bff.model.github_repository.GithubRepository;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.time.ZoneOffset;
 import java.util.HashSet;
@@ -26,9 +27,16 @@ public class ProjectFactory {
                 .repositoryId(mainRepository.getRepositoryId().getValue())
                 .repositoryUrl(mainRepository.getHtmlUrl())
                 .title(extra.getTitle())
-                .websiteUrl(extra.getWebsiteUrl())
                 .lastChangedDateTime(mainRepository.getPushedAt().toInstant(ZoneOffset.UTC))
                 .startsOpen(Boolean.TRUE.equals(extra.getStartsOpen()));
+
+        Optional.ofNullable(mainRepository.getWebsiteUrl())
+                .filter(StringUtils::hasText)
+                .ifPresentOrElse(
+                        builder::websiteUrl,
+                        () -> Optional.ofNullable(extra.getWebsiteUrl())
+                                .ifPresent(builder::websiteUrl)
+                );
 
         Optional.ofNullable(mainRepository.getTopics())
                 .map(HashSet::new)
@@ -43,6 +51,7 @@ public class ProjectFactory {
                 );
 
         Optional.ofNullable(mainRepository.getDescription())
+                .filter(StringUtils::hasText)
                 .ifPresentOrElse(
                         builder::description,
                         () -> Optional.ofNullable(extra.getCustomDescription())

@@ -74,11 +74,12 @@ public class ProjectsIntegrationTest {
     class GetProjects {
         @Test
         void shouldBeAllNonArchivedProjectsWhenNoErrors() throws JSONException {
-            githubMockServer.mockOkayUserInstallationAccessTokens();
             githubMockServer.mockOkayUserInstallation();
-            githubMockServer.mockOkayUserRepos();
-            githubMockServer.mockOkayProjectDescriptionFileRepository1();
-            githubMockServer.mockOkayProjectDescriptionFileRepository2();
+            githubMockServer.mockOkayUserInstallationAccessTokens();
+            githubMockServer.mockOkayUserRepositoriesForMapping();
+            githubMockServer.mockOkayProjectDescriptionFileForUsageOfMainData();
+            githubMockServer.mockOkayProjectDescriptionFileForUsageOfExtraData();
+            githubMockServer.mockOkayProjectDescriptionFileForOptionalData();
 
             var responseBody = get("/projects")
                     .then()
@@ -90,33 +91,49 @@ public class ProjectsIntegrationTest {
                                 {
                                     "projects": [
                                         {
-                                            "repositoryId": "repository-1",
-                                            "uniqueName": "repository-1",
+                                            "repositoryId": "test-usage-of-main-data",
+                                            "uniqueName": "test-usage-of-main-data",
                                             "title": "Portfolio Website",
-                                            "description": "This is my portfolio website.",
-                                            "tags": ["frontend", "backend", "java", "svelte"],
-                                            "repositoryUrl": "https://github.com/{username}/repository-1",
-                                            "websiteUrl": "https://my-website.com",
-                                            "startsOpen": true,
-                                            "complexity": {
-                                                "code": "complexity-high",
-                                                "text": "High"
-                                            },
-                                            "lastChangedDateTime": "2023-10-12T10:10:00Z"
-                                        },
-                                        {
-                                            "repositoryId": "repository-2",
-                                            "uniqueName": "repository-2",
-                                            "title": "A Project",
-                                            "description": "This is my default description",
-                                            "tags": ["backend", "docker", "java"],
-                                            "repositoryUrl": "https://github.com/{username}/repository-2",
+                                            "description": "This is my main description.",
+                                            "tags": ["main", "extra"],
+                                            "repositoryUrl": "https://github.com/{username}/test-usage-of-main-data",
+                                            "websiteUrl": "https://main-website-url.com",
                                             "startsOpen": false,
                                             "complexity": {
                                                 "code": "complexity-medium",
                                                 "text": "Medium"
                                             },
+                                            "lastChangedDateTime": "2023-10-12T10:10:00Z"
+                                        },
+                                        {
+                                            "repositoryId": "test-usage-of-extra-data",
+                                            "uniqueName": "test-usage-of-extra-data",
+                                            "title": "A Project",
+                                            "description": "This is my extra description.",
+                                            "tags": ["extra"],
+                                            "repositoryUrl": "https://github.com/{username}/test-usage-of-extra-data",
+                                            "websiteUrl": "https://extra-website-url.com",
+                                            "startsOpen": true,
+                                            "complexity": {
+                                                "code": "complexity-high",
+                                                "text": "High"
+                                            },
                                             "lastChangedDateTime": "2023-10-10T11:11:59Z"
+                                        },
+                                        {
+                                            "repositoryId": "test-optional-data",
+                                            "uniqueName": "test-optional-data",
+                                            "title": "Optional Data Project",
+                                            "description": "This is my extra description.",
+                                            "tags": [],
+                                            "repositoryUrl": "https://github.com/{username}/test-optional-data",
+                                            "websiteUrl": null,
+                                            "startsOpen": false,
+                                            "complexity": {
+                                                "code": "complexity-medium",
+                                                "text": "Medium"
+                                            },
+                                            "lastChangedDateTime": "2023-10-21T02:28:06Z"
                                         }
                                     ]
                                 }
@@ -130,9 +147,9 @@ public class ProjectsIntegrationTest {
         void shouldBeProjectsWithDescriptionWhenRepositoryDoesNotContainDescriptionFile() throws JSONException {
             githubMockServer.mockOkayUserInstallationAccessTokens();
             githubMockServer.mockOkayUserInstallation();
-            githubMockServer.mockOkayUserRepos();
-            githubMockServer.mockOkayProjectDescriptionFileRepository1();
-            githubMockServer.mockNotFoundProjectDescriptionFileRepository2();
+            githubMockServer.mockOkayUserRepositoriesForMissingContent();
+            githubMockServer.mockOkayProjectDescriptionFileForUsageOfMainData();
+            githubMockServer.mockNotFoundProjectDescriptionFileForMissingExtraDataRepository();
 
             var responseBody = get("/projects")
                     .then()
@@ -144,18 +161,18 @@ public class ProjectsIntegrationTest {
             JSONAssert.assertEquals("""
                                 {
                                     "projects": [
-                                        {
-                                            "repositoryId": "repository-1",
-                                            "uniqueName": "repository-1",
+                                          {
+                                            "repositoryId": "test-usage-of-main-data",
+                                            "uniqueName": "test-usage-of-main-data",
                                             "title": "Portfolio Website",
-                                            "description": "This is my portfolio website.",
-                                            "tags": ["frontend", "backend", "java", "svelte"],
-                                            "repositoryUrl": "https://github.com/{username}/repository-1",
-                                            "websiteUrl": "https://my-website.com",
-                                            "startsOpen": true,
+                                            "description": "This is my main description.",
+                                            "tags": ["main", "extra"],
+                                            "repositoryUrl": "https://github.com/{username}/test-usage-of-main-data",
+                                            "websiteUrl": "https://main-website-url.com",
+                                            "startsOpen": false,
                                             "complexity": {
-                                                "code": "complexity-high",
-                                                "text": "High"
+                                                "code": "complexity-medium",
+                                                "text": "Medium"
                                             },
                                             "lastChangedDateTime": "2023-10-12T10:10:00Z"
                                         }

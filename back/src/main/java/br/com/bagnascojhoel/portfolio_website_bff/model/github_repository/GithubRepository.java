@@ -1,4 +1,4 @@
-package br.com.bagnascojhoel.portfolio_website_bff.model.github.github_repository;
+package br.com.bagnascojhoel.portfolio_website_bff.model.github_repository;
 
 import br.com.bagnascojhoel.portfolio_website_bff.model.RepositoryId;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -23,6 +23,10 @@ public final class GithubRepository {
     @NonNull
     @JsonProperty("html_url")
     private final String htmlUrl;
+
+    @Nullable
+    @JsonProperty("homepage")
+    private final String websiteUrl;
 
     @NonNull
     @JsonProperty("archived")

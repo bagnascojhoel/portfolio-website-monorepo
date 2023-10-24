@@ -2,7 +2,7 @@ package br.com.bagnascojhoel.portfolio_website_bff.model.extra_portfolio_descrip
 
 import br.com.bagnascojhoel.portfolio_website_bff.model.github.GithubAuthentication;
 import br.com.bagnascojhoel.portfolio_website_bff.model.github.GithubUriBuilder;
-import br.com.bagnascojhoel.portfolio_website_bff.model.github.github_repository.GithubRepository;
+import br.com.bagnascojhoel.portfolio_website_bff.model.github_repository.GithubRepository;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

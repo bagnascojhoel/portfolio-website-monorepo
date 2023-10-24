@@ -97,9 +97,9 @@ public class ProjectsCacheIntegrationTest {
         void shouldBeUsingCacheWhenCacheIsEnabled() throws InterruptedException {
             githubMockServer.mockOkayUserInstallationAccessTokens();
             githubMockServer.mockOkayUserInstallation();
-            githubMockServer.mockOkayUserRepos();
-            githubMockServer.mockOkayProjectDescriptionFileRepository1();
-            githubMockServer.mockOkayProjectDescriptionFileRepository2();
+            githubMockServer.mockOkayUserRepositoriesForMapping();
+            githubMockServer.mockOkayProjectDescriptionFileForUsageOfMainData();
+            githubMockServer.mockOkayProjectDescriptionFileForUsageOfExtraData();
 
             cacheManager.getCache("projects").clear();
             var timeForFirstRequest = get("/projects").then()
@@ -124,9 +124,9 @@ public class ProjectsCacheIntegrationTest {
         void shouldBeUsingScheduling() {
             githubMockServer.mockOkayUserInstallationAccessTokens();
             githubMockServer.mockOkayUserInstallation();
-            githubMockServer.mockOkayUserRepos();
-            githubMockServer.mockOkayProjectDescriptionFileRepository1();
-            githubMockServer.mockOkayProjectDescriptionFileRepository2();
+            githubMockServer.mockOkayUserRepositoriesForMapping();
+            githubMockServer.mockOkayProjectDescriptionFileForUsageOfMainData();
+            githubMockServer.mockOkayProjectDescriptionFileForUsageOfExtraData();
             await()
                     .atMost(Duration.TEN_SECONDS)
                     .untilAsserted(() -> Mockito.verify(projectsController).getMyProjects());

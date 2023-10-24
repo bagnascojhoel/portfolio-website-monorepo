@@ -1,4 +1,4 @@
-package br.com.bagnascojhoel.portfolio_website_bff.model.github.github_repository;
+package br.com.bagnascojhoel.portfolio_website_bff.model.github_repository;
 
 import br.com.bagnascojhoel.portfolio_website_bff.model.github.GithubAuthentication;
 import br.com.bagnascojhoel.portfolio_website_bff.model.github.GithubQueryParams;
