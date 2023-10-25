@@ -1,16 +1,44 @@
-# My Portfolio
+# My Portfolio Website
 
-My personal portfolio website. The cards are built with information gathered from my public repositories on GitHub. Each project has its own description file, called `this-is-jhoel.json`. It is published with GitHub Pages.
+This project is composed of three applications:
 
-## Description file template
+- front-end: 
+  - written with Svelte
+  - built with Webpack
+  - styled with Tailwindcss
+  - structured with Ports and Adapters architecture
+  - deployed to GitHub Pages
+
+- back-end for front-end (bff):
+  - written in Java, with Spring Boot
+  - uses the GitHub API to fetch my repositories and projects to be shown in the UI
+  - uses Spring Reactive to asynchronously fetch the extra information from a portfolio-description.json file on each repository
+  - uses scheduling and cache to ensure some freshness and quick response times
+  - architected with MVC, since its scope is too small for Clean Architecture or Ports and Adapters 
+  - compiled to a Native Image to reduce the memory usage on fly.io (otherwise it went past the memory limit and the server dropped)
+  - deployed to fly.io
+- blog:
+  - monolith written with JavaScript and Next.js
+  - uses the Notion API to load the articles
+  - deployed to Vercel
+
+Since I am the only person working on it, I choose to use a monorepo for all of them.
+Each one of the applications is built and deployed through a CI pipeline built with GitHub Actions.
+
+## Extra Portfolio Description
+
+The BFF reads a file from the repositories root path with name `portfolio-description.json`. If that
+ file is missing, the repository is not returned. That file must follow this template:
 
 ```json
 {
-  "title": "My Portfolio",
-  "tags": ["front-end", "svelte"],
-  "description": "My description"
+  "title": "my title", // required
+  "description" "my description", // optional, default uses the description from repository
+  "tags": ["tag"], // optional, default uses topics from repository
+  "websiteUrl": "website url", // optional, default uses website url from repository
+  "startsOpen": true // optional, default is false
+  "complexity": "HIGH", // optional, default is MEDIUM
 }
-
 ```
 
 ## Contributing
@@ -38,21 +66,3 @@ The scopes allowed are:
 - blog: changes on `blog` folder
 - docs: changes on `docs` folder
 - all: changes that affect all applications
-
-## Front-end
-
-### Technologies
-
-Since the project premisse was a simple website to showcase my projects, I chooose technologies which allowed me a fast development and cheap deployment:
-
-- Svelte
-- Tailwind CSS
-- Typescript
-
-### Running it
-
-To build it you will need node (recommended `v12.22.8`). Then clone this repository, access its folder and run:
-
-```bash
-npm run watch:local
-```
