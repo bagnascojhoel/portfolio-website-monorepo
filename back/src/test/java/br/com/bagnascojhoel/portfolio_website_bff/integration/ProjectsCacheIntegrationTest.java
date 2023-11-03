@@ -88,6 +88,9 @@ public class ProjectsCacheIntegrationTest {
         mockServerClient.reset();
         testSchedulingManager.allowSetupProjectCache();
         githubMockServer = new GithubMockServer(githubUsername, githubProjectDescriptionFile, mockServerClient);
+        githubMockServer.mockEndpoint("GET /users/{username}/installation");
+        githubMockServer.mockEndpoint("POST /app/installations/{installationId}/access_tokens");
+        githubMockServer.mockEndpoint("GET /users/{username}/repos");
     }
 
     @Nested
@@ -95,11 +98,8 @@ public class ProjectsCacheIntegrationTest {
     class GetProjects {
         @Test
         void shouldBeUsingCacheWhenCacheIsEnabled() throws InterruptedException {
-            githubMockServer.mockOkayUserInstallationAccessTokens();
-            githubMockServer.mockOkayUserInstallation();
-            githubMockServer.mockOkayUserRepositoriesForMapping();
-            githubMockServer.mockOkayProjectDescriptionFileForUsageOfMainData();
-            githubMockServer.mockOkayProjectDescriptionFileForUsageOfExtraData();
+            githubMockServer.mockEndpoint("GET /repos/{username}/prefer-github-description/contents/{fileName}");
+            githubMockServer.mockEndpoint("GET /repos/{username}/*/contents/{fileName}");
 
             cacheManager.getCache("projects").clear();
             var timeForFirstRequest = get("/projects").then()
@@ -122,11 +122,9 @@ public class ProjectsCacheIntegrationTest {
 
         @Test
         void shouldBeUsingScheduling() {
-            githubMockServer.mockOkayUserInstallationAccessTokens();
-            githubMockServer.mockOkayUserInstallation();
-            githubMockServer.mockOkayUserRepositoriesForMapping();
-            githubMockServer.mockOkayProjectDescriptionFileForUsageOfMainData();
-            githubMockServer.mockOkayProjectDescriptionFileForUsageOfExtraData();
+            githubMockServer.mockEndpoint("GET /repos/{username}/prefer-github-description/contents/{fileName}");
+            githubMockServer.mockEndpoint("GET /repos/{username}/*/contents/{fileName}");
+            
             await()
                     .atMost(Duration.TEN_SECONDS)
                     .untilAsserted(() -> Mockito.verify(projectsController).getMyProjects());

@@ -16,6 +16,7 @@ import static org.mockserver.model.JsonBody.json;
 import static org.mockserver.model.Parameter.param;
 
 public final class GithubMockServer {
+
     private static final String MY_INSTALLATION_ID = "6125";
 
     private final String githubUsername;
@@ -34,7 +35,71 @@ public final class GithubMockServer {
         this.mockServerClient = mockServerClient;
     }
 
-    public void mockOkayUserInstallation() {
+    public void mockEndpoint(final String endpoint) {
+        switch (endpoint) {
+            case "GET /users/{username}/installation":
+                this.userInstallation();
+                break;
+            case "POST /app/installations/{installationId}/access_tokens":
+                this.userInstallationAccessTokens();
+                break;
+            case "GET /users/{username}/repos":
+                this.userRepositories();
+                break;
+            case "GET /repos/{username}/prefer-github-description/contents/{fileName}":
+                this.mockExtraDescriptionContent("prefer-github-description", """
+                        {
+                             "title": "My Title",
+                             "websiteUrl": "https://my-website.com",
+                             "description": "This is my extra description.",
+                             "websiteUrl": "https://extra-website-url.com"
+                         }""");
+                break;
+            case "GET /repos/{username}/fill-in-with-extra-description/contents/{fileName}":
+                this.mockExtraDescriptionContent("fill-in-with-extra-description", """
+                        {
+                            "title": "A Project",
+                            "tags": ["extra-tag"],
+                            "description": "This is my extra description.",
+                            "websiteUrl": "https://extra-website-url.com",
+                            "complexity": "HIGH",
+                            "startsOpen": true
+                        }""");
+                break;
+            case "GET /repos/{username}/show-archived/contents/{fileName}":
+                this.mockExtraDescriptionContent("show-archived", """
+                        {
+                           "title": "Portfolio Website",
+                           "showEvenArchived": true
+                        }""");
+                break;
+            case "GET /repos/{username}/use-default-value-for-optional-fields/contents/{fileName}":
+                this.mockExtraDescriptionContent("use-default-value-for-optional-fields", """
+                        {
+                          "title": "Portfolio Website"
+                        }""");
+                break;
+            case "GET /repos/{username}/merge-fields/contents/{fileName}":
+                this.mockExtraDescriptionContent("merge-fields", """
+                        {
+                          "title": "Portfolio Website",
+                          "tags": ["extra-tag", "another-extra-tag"]
+                        }""");
+                break;
+            case "GET /repos/{username}/archived/contents/{fileName}":
+                this.mockExtraDescriptionContent("archived", """
+                        {
+                          "title": "Portfolio Website"
+                        }""");
+                break;
+            case "GET /repos/{username}/*/contents/{fileName}":
+                this.anyExtraDescriptionContentMissing();
+                break;
+        }
+    }
+
+    // TODO Use the builder pattern to create the response body of each mocked endpoint
+    private void userInstallation() {
         mockServerClient
                 .when(
                         request()
@@ -57,7 +122,7 @@ public final class GithubMockServer {
 
     }
 
-    public void mockOkayUserInstallationAccessTokens() {
+    private void userInstallationAccessTokens() {
         var expiresAt = Instant.now().plus(10, ChronoUnit.MINUTES).toString();
 
         mockServerClient
@@ -67,7 +132,6 @@ public final class GithubMockServer {
                                 .withPath("/app/installations/{installationId}/access_tokens")
                                 .withPathParameter(param("installationId", MY_INSTALLATION_ID))
                 )
-//                .withId("installation_access_token-200")
                 .respond(
                         response()
                                 .withStatusCode(200)
@@ -81,7 +145,7 @@ public final class GithubMockServer {
                 );
     }
 
-    public void mockOkayUserRepositoriesForMapping() {
+    private void userRepositories() {
         mockServerClient
                 .when(
                         request()
@@ -89,7 +153,6 @@ public final class GithubMockServer {
                                 .withPath("/users/{username}/repos")
                                 .withPathParameter(param("username", githubUsername))
                 )
-//                .withId("user_repos_200")
                 .respond(
                         response()
                                 .withStatusCode(200)
@@ -97,17 +160,17 @@ public final class GithubMockServer {
                                 .withBody(json("""
                                         [
                                             {
-                                                "name": "test-usage-of-main-data",
-                                                "html_url": "https://github.com/{username}/test-usage-of-main-data",
-                                                "homepage": "https://main-website-url.com",
+                                                "name": "prefer-github-description",
+                                                "html_url": "https://github.com/{username}/prefer-github-description",
+                                                "homepage": "https://prefer-github-description",
                                                 "archived": false,
                                                 "topics": ["main"],
                                                 "description": "This is my main description.",
                                                 "pushed_at": "2023-10-12T10:10:00Z"
                                             },
                                             {
-                                                "name": "test-usage-of-extra-data",
-                                                "html_url": "https://github.com/{username}/test-usage-of-extra-data",
+                                                "name": "fill-in-with-extra-description",
+                                                "html_url": "https://github.com/{username}/fill-in-with-extra-description",
                                                 "homepage": "",
                                                 "archived": false,
                                                 "topics": [],
@@ -115,47 +178,17 @@ public final class GithubMockServer {
                                                 "pushed_at": "2023-10-10T11:11:59Z"
                                             },
                                             {
-                                                "name": "test-optional-data",
-                                                "html_url": "https://github.com/{username}/test-optional-data",
+                                                "name": "merge-fields",
+                                                "html_url": "https://github.com/{username}/merge-fields",
                                                 "homepage": null,
                                                 "archived": false,
-                                                "topics": [],
-                                                "description": "",
+                                                "topics": ["github-topic"],
+                                                "description": "GitHub description",
                                                 "pushed_at": "2023-10-21T02:28:06Z"
                                             },
                                             {
-                                                "name": "test-archived-repository",
-                                                "html_url": "https://github.com/{username}/test-archived-repository",
-                                                "homepage": null,
-                                                "archived": true,
-                                                "topics": [],
-                                                "description": "",
-                                                "pushed_at": "2023-10-21T02:28:06Z"
-                                            }
-                                        ]
-                                        """.replace("{username}", githubUsername))
-                                )
-                );
-    }
-
-    public void mockOkayUserRepositoriesForMissingContent() {
-        mockServerClient
-                .when(
-                        request()
-                                .withMethod("GET")
-                                .withPath("/users/{username}/repos")
-                                .withPathParameter(param("username", githubUsername))
-                )
-//                .withId("user_repos_200")
-                .respond(
-                        response()
-                                .withStatusCode(200)
-                                .withContentType(MediaType.JSON_UTF_8)
-                                .withBody(json("""
-                                        [
-                                            {
-                                                "name": "test-usage-of-main-data",
-                                                "html_url": "https://github.com/{username}/test-usage-of-main-data",
+                                                "name": "show-archived",
+                                                "html_url": "https://github.com/{username}/show-archived",
                                                 "homepage": "https://main-website-url.com",
                                                 "archived": false,
                                                 "topics": ["main"],
@@ -163,129 +196,39 @@ public final class GithubMockServer {
                                                 "pushed_at": "2023-10-12T10:10:00Z"
                                             },
                                             {
-                                                "name": "missing-extra-data",
+                                                "name": "use-default-value-for-optional-fields",
                                                 "html_url": "https://github.com/{username}/repository-2",
                                                 "homepage": "",
                                                 "archived": false,
                                                 "topics": [],
-                                                "description": null,
+                                                "description": "GitHub description",
                                                 "pushed_at": "2023-10-10T11:11:59Z"
-                                            }
+                                            },
+                                            {
+                                                "name": "archived",
+                                                "html_url": "https://github.com/{username}/archived",
+                                                "homepage": "https://main-website-url.com",
+                                                "archived": true,
+                                                "topics": ["main"],
+                                                "description": "This is my main description.",
+                                                "pushed_at": "2023-10-12T10:10:00Z"
+                                            },
                                         ]
                                         """.replace("{username}", githubUsername))
                                 )
                 );
     }
 
-
-    public void mockOkayProjectDescriptionFileForUsageOfMainData() {
-        var encodedContent = Base64.getEncoder().encodeToString("""
-                {
-                  "title": "Portfolio Website",
-                  "tags": ["extra"]
-                }""".getBytes(StandardCharsets.UTF_8));
-
+    private void anyExtraDescriptionContentMissing() {
         mockServerClient
                 .when(request()
                         .withMethod("GET")
-                        .withPath("/repos/{username}/{repoName}/contents/{fileName}")
+                        .withPath("/repos/{username}/*/contents/{fileName}")
                         .withPathParameters(
                                 param("username", githubUsername),
-                                param("repoName", "test-usage-of-main-data"),
                                 param("fileName", githubFileName)
                         )
                 )
-//                .withId("project_description_file_repository_1-200")
-                .respond(response()
-                        .withStatusCode(200)
-                        .withDelay(Delay.delay(TimeUnit.SECONDS, 1))
-                        .withBody(json("""
-                                    {
-                                      "content": "{encodedContent}",
-                                    }
-                                """.replace("{encodedContent}", encodedContent))
-                        )
-                );
-    }
-
-    public void mockOkayProjectDescriptionFileForUsageOfExtraData() {
-        var encodedContent = Base64.getEncoder().encodeToString("""
-                {
-                    "title": "A Project",
-                    "websiteUrl": "https://my-website.com",
-                    "tags": ["extra"],
-                    "description": "This is my extra description.",
-                    "websiteUrl": "https://extra-website-url.com",
-                    "complexity": "HIGH",
-                    "startsOpen": true
-                }
-                """.getBytes(StandardCharsets.UTF_8));
-
-        mockServerClient
-                .when(request()
-                        .withMethod("GET")
-                        .withPath("/repos/{username}/{repoName}/contents/{fileName}")
-                        .withPathParameters(
-                                param("username", githubUsername),
-                                param("repoName", "test-usage-of-extra-data"),
-                                param("fileName", githubFileName)
-                        )
-                )
-//                .withId("project_description_file_repository_2-200")
-                .respond(response()
-                        .withDelay(Delay.delay(TimeUnit.SECONDS, 1))
-                        .withStatusCode(200)
-                        .withBody(json("""
-                                    {
-                                      "content": "{encodedContent}",
-                                    }
-                                """.replace("{encodedContent}", encodedContent))
-                        )
-                );
-    }
-
-    public void mockOkayProjectDescriptionFileForOptionalData() {
-        var encodedContent = Base64.getEncoder().encodeToString("""
-                {
-                  "title": "Optional Data Project",
-                  "description": "This is my extra description."
-                }""".getBytes(StandardCharsets.UTF_8));
-
-        mockServerClient
-                .when(request()
-                        .withMethod("GET")
-                        .withPath("/repos/{username}/{repoName}/contents/{fileName}")
-                        .withPathParameters(
-                                param("username", githubUsername),
-                                param("repoName", "test-optional-data"),
-                                param("fileName", githubFileName)
-                        )
-                )
-//                .withId("project_description_file_repository_1-200")
-                .respond(response()
-                        .withStatusCode(200)
-                        .withDelay(Delay.delay(TimeUnit.SECONDS, 1))
-                        .withBody(json("""
-                                    {
-                                      "content": "{encodedContent}",
-                                    }
-                                """.replace("{encodedContent}", encodedContent))
-                        )
-                );
-    }
-
-    public void mockNotFoundProjectDescriptionFileForMissingExtraDataRepository() {
-        mockServerClient
-                .when(request()
-                        .withMethod("GET")
-                        .withPath("/repos/{username}/{repoName}/contents/{fileName}")
-                        .withPathParameters(
-                                param("username", githubUsername),
-                                param("repoName", "missing-extra-data"),
-                                param("fileName", githubFileName)
-                        )
-                )
-//                .withId("project_description_file_repository_2-404")
                 .respond(response()
                         .withDelay(Delay.delay(TimeUnit.SECONDS, 1))
                         .withStatusCode(404)
@@ -295,6 +238,32 @@ public final class GithubMockServer {
                                     }
                                 """
                         ))
+                );
+    }
+
+    private void mockExtraDescriptionContent(final String repositoryId, final String json) {
+        var encodedContent = Base64.getEncoder()
+                .encodeToString(json.getBytes(StandardCharsets.UTF_8));
+
+        mockServerClient
+                .when(request()
+                        .withMethod("GET")
+                        .withPath("/repos/{username}/{repoName}/contents/{fileName}")
+                        .withPathParameters(
+                                param("username", githubUsername),
+                                param("repoName", repositoryId),
+                                param("fileName", githubFileName)
+                        )
+                )
+                .respond(response()
+                        .withStatusCode(200)
+                        .withDelay(Delay.delay(TimeUnit.SECONDS, 1))
+                        .withBody(json("""
+                                    {
+                                      "content": "{encodedContent}",
+                                    }
+                                """.replace("{encodedContent}", encodedContent))
+                        )
                 );
     }
 }

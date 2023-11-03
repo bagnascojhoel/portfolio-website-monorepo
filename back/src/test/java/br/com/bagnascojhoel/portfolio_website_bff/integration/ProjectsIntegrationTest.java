@@ -5,15 +5,12 @@ import br.com.bagnascojhoel.portfolio_website_bff.code.GithubMockServer;
 import br.com.bagnascojhoel.portfolio_website_bff.code.TestSchedulingManager;
 import br.com.bagnascojhoel.portfolio_website_bff.controller.ProjectsController;
 import io.restassured.RestAssured;
-import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockserver.client.MockServerClient;
 import org.mockserver.springtest.MockServerTest;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.core.AutoConfigureCache;
@@ -23,6 +20,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import static io.restassured.RestAssured.get;
+import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(
         classes = {PortfolioWebsiteBffApplication.class, TestSchedulingManager.class},
@@ -61,129 +59,113 @@ public class ProjectsIntegrationTest {
 
     @BeforeEach
     void beforeEach() {
+        // TODO Change RestAssured to use MockMvc
         RestAssured.baseURI = "http://localhost:" + port + "/api";
-        while (!mockServerClient.hasStarted()) {
-        }
         mockServerClient.reset();
         testSchedulingManager.allowSetupProjectCache();
         githubMockServer = new GithubMockServer(githubUsername, githubProjectDescriptionFile, mockServerClient);
+        githubMockServer.mockEndpoint("GET /users/{username}/installation");
+        githubMockServer.mockEndpoint("POST /app/installations/{installationId}/access_tokens");
+        githubMockServer.mockEndpoint("GET /users/{username}/repos");
     }
 
     @Nested
     @DisplayName("GET /projects")
     class GetProjects {
         @Test
-        void shouldBeAllNonArchivedProjectsWhenNoErrors() throws JSONException {
-            githubMockServer.mockOkayUserInstallation();
-            githubMockServer.mockOkayUserInstallationAccessTokens();
-            githubMockServer.mockOkayUserRepositoriesForMapping();
-            githubMockServer.mockOkayProjectDescriptionFileForUsageOfMainData();
-            githubMockServer.mockOkayProjectDescriptionFileForUsageOfExtraData();
-            githubMockServer.mockOkayProjectDescriptionFileForOptionalData();
+        void shouldBeEmptyWhenThereAreNoExtraPortfolioDescriptions() {
+            githubMockServer.mockEndpoint("GET /repos/{username}/*/contents/{fileName}");
 
-            var responseBody = get("/projects")
+            get("/projects")
                     .then()
                     .assertThat()
-                    .extract()
-                    .body()
-                    .asString();
-            JSONAssert.assertEquals("""
-                                {
-                                    "projects": [
-                                        {
-                                            "repositoryId": "test-usage-of-main-data",
-                                            "uniqueName": "test-usage-of-main-data",
-                                            "title": "Portfolio Website",
-                                            "description": "This is my main description.",
-                                            "tags": ["main", "extra"],
-                                            "repositoryUrl": "https://github.com/{username}/test-usage-of-main-data",
-                                            "websiteUrl": "https://main-website-url.com",
-                                            "startsOpen": false,
-                                            "complexity": {
-                                                "code": "complexity-medium",
-                                                "text": "Medium"
-                                            },
-                                            "lastChangedDateTime": "2023-10-12T10:10:00Z"
-                                        },
-                                        {
-                                            "repositoryId": "test-usage-of-extra-data",
-                                            "uniqueName": "test-usage-of-extra-data",
-                                            "title": "A Project",
-                                            "description": "This is my extra description.",
-                                            "tags": ["extra"],
-                                            "repositoryUrl": "https://github.com/{username}/test-usage-of-extra-data",
-                                            "websiteUrl": "https://extra-website-url.com",
-                                            "startsOpen": true,
-                                            "complexity": {
-                                                "code": "complexity-high",
-                                                "text": "High"
-                                            },
-                                            "lastChangedDateTime": "2023-10-10T11:11:59Z"
-                                        },
-                                        {
-                                            "repositoryId": "test-optional-data",
-                                            "uniqueName": "test-optional-data",
-                                            "title": "Optional Data Project",
-                                            "description": "This is my extra description.",
-                                            "tags": [],
-                                            "repositoryUrl": "https://github.com/{username}/test-optional-data",
-                                            "websiteUrl": null,
-                                            "startsOpen": false,
-                                            "complexity": {
-                                                "code": "complexity-medium",
-                                                "text": "Medium"
-                                            },
-                                            "lastChangedDateTime": "2023-10-21T02:28:06Z"
-                                        }
-                                    ]
-                                }
-                            """.replace("{username}", githubUsername),
-                    responseBody,
-                    JSONCompareMode.LENIENT
-            );
+                    .body("projects", empty());
         }
 
         @Test
-        void shouldBeProjectsWithDescriptionWhenRepositoryDoesNotContainDescriptionFile() throws JSONException {
-            githubMockServer.mockOkayUserInstallationAccessTokens();
-            githubMockServer.mockOkayUserInstallation();
-            githubMockServer.mockOkayUserRepositoriesForMissingContent();
-            githubMockServer.mockOkayProjectDescriptionFileForUsageOfMainData();
-            githubMockServer.mockNotFoundProjectDescriptionFileForMissingExtraDataRepository();
+        void shouldPreferDataSetOnGithubRepository() {
+            githubMockServer.mockEndpoint("GET /repos/{username}/prefer-github-description/contents/{fileName}");
+            githubMockServer.mockEndpoint("GET /repos/{username}/*/contents/{fileName}");
 
-            var responseBody = get("/projects")
+            get("/projects")
                     .then()
                     .assertThat()
-                    .extract()
-                    .body()
-                    .asString();
+                    .body("projects.repositoryId", contains("prefer-github-description"))
+                    .body("projects.uniqueName", contains("prefer-github-description"))
+                    .body("projects.title", contains("My Title"))
+                    .body("projects.description", contains("This is my main description."))
+                    .body("projects.repositoryUrl", contains("https://github.com/{u}/prefer-github-description".replace("{u}", githubUsername)))
+                    .body("projects.websiteUrl", contains("https://prefer-github-description"))
+                    .body("projects.lastChangedDateTime", contains("2023-10-12T10:10:00Z"));
+        }
 
-            JSONAssert.assertEquals("""
-                                {
-                                    "projects": [
-                                          {
-                                            "repositoryId": "test-usage-of-main-data",
-                                            "uniqueName": "test-usage-of-main-data",
-                                            "title": "Portfolio Website",
-                                            "description": "This is my main description.",
-                                            "tags": ["main", "extra"],
-                                            "repositoryUrl": "https://github.com/{username}/test-usage-of-main-data",
-                                            "websiteUrl": "https://main-website-url.com",
-                                            "startsOpen": false,
-                                            "complexity": {
-                                                "code": "complexity-medium",
-                                                "text": "Medium"
-                                            },
-                                            "lastChangedDateTime": "2023-10-12T10:10:00Z"
-                                        }
-                                    ]
-                                }
-                            """.replace("{username}", githubUsername),
-                    responseBody,
-                    JSONCompareMode.NON_EXTENSIBLE
-            );
+        @Test
+        void shouldContainArchivedProjectWhenItIsShowEvenArchived() {
+            githubMockServer.mockEndpoint("GET /repos/{username}/show-archived/contents/{fileName}");
+            githubMockServer.mockEndpoint("GET /repos/{username}/*/contents/{fileName}");
+
+            get("/projects")
+                    .then()
+                    .assertThat()
+                    .body("projects.repositoryId", contains("show-archived"));
+        }
+
+        @Test
+        void shouldFillFieldsMissingFromGithubRepositoryWithDataFromExtraDescription() {
+            githubMockServer.mockEndpoint("GET /repos/{username}/fill-in-with-extra-description/contents/{fileName}");
+            githubMockServer.mockEndpoint("GET /repos/{username}/*/contents/{fileName}");
+
+            get("/projects")
+                    .then()
+                    .assertThat()
+                    .body("projects.repositoryId", contains("fill-in-with-extra-description"))
+                    .body("projects.uniqueName", contains("fill-in-with-extra-description"))
+                    .body("projects.description", contains("This is my extra description."))
+                    .body("projects.find { it.repositoryId == 'fill-in-with-extra-description' } .tags", containsInAnyOrder("extra-tag"))
+                    .body("projects.repositoryUrl", contains("https://github.com/{u}/fill-in-with-extra-description".replace("{u}", githubUsername)))
+                    .body("projects.websiteUrl", contains("https://extra-website-url.com"))
+                    .body("projects.startsOpen", contains(true))
+                    .body("projects.complexity.code", contains("complexity-high"))
+                    .body("projects.complexity.text", contains("High"))
+                    .body("projects.lastChangedDateTime", contains("2023-10-10T11:11:59Z"));
+        }
+
+        @Test
+        void shouldUseDefaultValuesForMissingExtraData() {
+            githubMockServer.mockEndpoint("GET /repos/{username}/use-default-value-for-optional-fields/contents/{fileName}");
+            githubMockServer.mockEndpoint("GET /repos/{username}/*/contents/{fileName}");
+
+            get("/projects")
+                    .then()
+                    .assertThat()
+                    .body("projects.repositoryId", contains("use-default-value-for-optional-fields"))
+                    .body("projects.startsOpen", contains(false))
+                    .body("projects.complexity.code", contains("complexity-medium"))
+                    .body("projects.complexity.text", contains("Medium"));
+        }
+
+        @Test
+        void shouldMergeFieldsFromMainAndExtraData() {
+            githubMockServer.mockEndpoint("GET /repos/{username}/merge-fields/contents/{fileName}");
+            githubMockServer.mockEndpoint("GET /repos/{username}/*/contents/{fileName}");
+
+            get("/projects")
+                    .then()
+                    .assertThat()
+                    .body("projects.repositoryId", contains("merge-fields"))
+                    .body("projects.find { it.repositoryId == 'merge-fields' } .tags", containsInAnyOrder("github-topic", "extra-tag", "another-extra-tag"));
+        }
+
+        @Test
+        void shouldNotShowArchivedProjectsThatShouldNotBeShowEvenArchived() {
+            githubMockServer.mockEndpoint("GET /repos/{username}/archived/contents/{fileName}");
+            githubMockServer.mockEndpoint("GET /repos/{username}/*/contents/{fileName}");
+
+            get("/projects")
+                    .then()
+                    .assertThat()
+                    .body("projects.repositoryId", not(contains("archived")));
         }
     }
-
 
 }

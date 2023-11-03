@@ -34,4 +34,7 @@ public class ExtraPortfolioDescription {
 
     @Nullable
     private final Boolean startsOpen;
+
+    @Nullable
+    private final Boolean showEvenArchived;
 }

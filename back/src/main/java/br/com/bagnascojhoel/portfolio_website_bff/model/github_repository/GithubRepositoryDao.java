@@ -51,7 +51,6 @@ public class GithubRepositoryDao {
 
         var response = restTemplate.exchange(requestEntity, GithubRepository[].class);
         return Arrays.stream(Objects.requireNonNull(response.getBody()))
-                .filter(repo -> !repo.getArchived())
                 .collect(Collectors.toList());
     }
 }

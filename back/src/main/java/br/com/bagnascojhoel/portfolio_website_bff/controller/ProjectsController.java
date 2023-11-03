@@ -38,12 +38,24 @@ public class ProjectsController {
         Flux<ExtraPortfolioDescription> flux = extraPortfolioDescriptionDao.getExtraPortfolioDescriptions(githubRepositories);
 
         return flux
-                .map(extra -> ProjectSpecification.of(extra, this.getRepositoryById(githubRepositories, extra.getRepositoryId())))
+                .map(extra -> this.createSpec(extra, this.getRepositoryById(githubRepositories, extra.getRepositoryId())))
+                .filter(spec -> !spec.getGithubRepository().getIsArchived() || Boolean.TRUE.equals(spec.getExtraPortfolioDescription().getShowEvenArchived()))
                 .map(projectFactory::create)
                 .onErrorResume(SkipProjectException.class, ignored -> null)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet())
                 .block();
+    }
+
+    private ProjectSpecification createSpec(
+            final ExtraPortfolioDescription extraPortfolioDescription,
+            final GithubRepository githubRepository
+    ) {
+        try {
+            return ProjectSpecification.of(extraPortfolioDescription, githubRepository);
+        } catch (NullPointerException nullPointerException) {
+            throw new SkipProjectException();
+        }
     }
 
     private GithubRepository getRepositoryById(

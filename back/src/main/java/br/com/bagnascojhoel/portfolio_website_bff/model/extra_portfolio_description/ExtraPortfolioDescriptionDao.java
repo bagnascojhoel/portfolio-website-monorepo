@@ -26,10 +26,15 @@ public class ExtraPortfolioDescriptionDao {
     private static final String GITHUB_DESCRIPTION_FILE_PATH = "/repos/{username}/{repoName}/contents/{descriptionFileName}";
 
     private final WebClient webClient;
+
     private final GithubUriBuilder githubUriBuilder;
+
     private final ExtraPortfolioDescriptionFactory extraPortfolioDescriptionFactory;
+
     private final String githubProjectDescriptionFile;
+
     private final GithubAuthentication githubAuthentication;
+
     private final String githubUsername;
 
     public ExtraPortfolioDescriptionDao(

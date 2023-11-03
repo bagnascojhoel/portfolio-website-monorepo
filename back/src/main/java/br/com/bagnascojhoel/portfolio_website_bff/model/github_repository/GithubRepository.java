@@ -30,7 +30,7 @@ public final class GithubRepository {
 
     @NonNull
     @JsonProperty("archived")
-    private final Boolean archived;
+    private final Boolean isArchived;
 
     @Nullable
     @JsonProperty("description")
