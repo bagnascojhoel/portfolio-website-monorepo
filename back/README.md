@@ -5,7 +5,7 @@ This project is used as the backend for frontend of my portfolio website.
 ## To-Do's
 
 - [ ] Include pagination
-- [ ] Add exception handling
+- [x] Add exception handling
 - [ ] Webhook evict cache when repo has been added or changed
 
 ## Running Locally

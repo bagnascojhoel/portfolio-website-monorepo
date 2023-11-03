@@ -37,7 +37,8 @@ The BFF reads a file from the repositories root path with name `portfolio-descri
   "tags": ["tag"], // optional, default uses topics from repository
   "websiteUrl": "website url", // optional, default uses website url from repository
   "startsOpen": true // optional, default is false
-  "complexity": "HIGH", // optional, default is MEDIUM
+  "complexity": "HIGH", // optional, default is MEDIUM,
+  "showEvenArchived": true // optional, default is false
 }
 ```
 
