@@ -30,10 +30,10 @@
       container
       m-auto
       min-h-full
-      pt-32
-      md:pt-48
-      lg:pt-60
-      2xl:pt-72
+      pt-16
+      md:pt-32
+      lg:pt-16
+      2xl:pt-42
       px-6
       relative"
     >
