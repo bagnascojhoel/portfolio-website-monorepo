@@ -23,19 +23,20 @@
 <div class="min-h-screen bg-color-background bg-geometric-pattern">
     <main
         class="
-      flex
-      flex-col
-      items-center
-      lg:items-start
-      container
-      m-auto
-      min-h-full
-      pt-16
-      md:pt-32
-      lg:pt-16
-      2xl:pt-42
-      px-6
-      relative"
+            flex
+            flex-col
+            items-center
+            lg:items-start
+            container
+            m-auto
+            min-h-full
+            pt-16
+            md:pt-32
+            lg:pt-16
+            2xl:pt-42
+            px-6
+            relative
+        "
     >
         <IntroductionSection />
         {#if isMobileScreen}

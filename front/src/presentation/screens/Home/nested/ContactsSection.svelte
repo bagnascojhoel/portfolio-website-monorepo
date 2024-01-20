@@ -3,6 +3,7 @@
         EMAIL,
         PERSONAL_GITHUB_URL,
         PERSONAL_LINKEDIN_URL,
+        BLOG_URL
     } from './contact-info';
     import CaptionOnHover from '@components/CaptionOnHover.svelte';
     import Icon from '@components/Icon.svelte';
@@ -13,6 +14,7 @@
 
     const GITHUB_LABEL = 'github';
     const LINKEDIN_LABEL = 'linkedin';
+    const BLOG_LABEL = 'blog'
     const EMAIL_CAPTION = 'Copy to clipboard';
 
     function copyToClipboard(text: string) {
@@ -21,7 +23,20 @@
 </script>
 
 <section class="mt-12 mb-24 md:mt-24 lg:mt-0">
-    <ul class="mt-7 flex flex-col md:flex-row justify-center gap-4">
+    <ul class="mt-7 flex flex-col justify-center gap-4 md:grid md:grid-cols-2 md:gap-8 ">
+        <li>
+            <a
+                href={BLOG_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <Icon
+                    name="out-link"
+                    color={colors['primary-variant']}
+                    label={BLOG_LABEL}
+                />
+            </a>
+        </li>
         <li>
             <a
                 href={PERSONAL_LINKEDIN_URL}

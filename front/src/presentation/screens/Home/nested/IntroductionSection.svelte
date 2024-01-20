@@ -1,11 +1,11 @@
 <script>
   const TITLE = 'Hey, I am Jhoel';
   const DESCRIPTION = `
-I am a web developer that initiated my studies with front-end development, which was sparked by my technical course. Over the years, my career trajectory has transitioned into back-end development, where I have accumulated three years of professional experience (at 2023) working with Java and the Spring ecosystem. 
-
-My expertise extends to diverse application architectures and development methodologies, such as Microservices, Ports and Adapters, Domain-Driven Design, Behavior-Driven Development, and various automated testing practices.
-
-I am well-versed in continuous integration and delivery, as well as system observability. Currently, I work within a global team, which is providing me with the opportunity to enhance my English and remote-working skills.
+  I am a software engineer with more than 4 years of experience (January 2024), specialized in backend development.
+  
+  I have deep knowledge with Java and Spring for cloud-native HTTP/REST APIs, with production expertise in AWS, DDD, event-driven architecture, and CI/CD. But I also know my way around Python and Node.js back-end APIs as well as CI tools like Concourse and GitHub Actions.
+  
+  As a front-end developer, I exceed with React, Next.js, and Redux while keeping an organized, strongly typed, code base with TypeScript, ESLint, and Prettier. 
 `;
  
   const USERNAME = '@bagnascojhoel';
@@ -33,9 +33,5 @@ I am well-versed in continuous integration and delivery, as well as system obser
   </h1>
   <p class="text-base text-primary-variant max-w-3xl lg:max-w-lg mt-2 whitespace-pre-line">
     {DESCRIPTION}
-  </p>
-  <p class="text-base text-primary-variant max-w-3xl lg:max-w-lg mt-5">
-    I also have a blog for some things I want to share. 
-    <a href={BLOG_URL} target="_blank" rel="noreferrer" class="underline">Checkout my blog</a>.
   </p>
 </section>

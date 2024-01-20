@@ -2,6 +2,7 @@
     "name": "svelte-app",
     "version": "1.0.1",
     "devDependencies": {
+        "@mockoon/cli": "^6.1.0",
         "@tsconfig/svelte": "^3.0.0",
         "@types/node": "^14.11.1",
         "autoprefixer": "^10.4.0",
@@ -43,7 +44,8 @@
         "dev": "wp --config config/webpack.config.js --mode development --env development",
         "up": "wp --config config/webpack.config.js --mode development --env production",
         "build": "wp --config config/webpack.config.js --mode production --env production",
-        "build:analyze": "wp --config config/webpack.config.js --mode production --env production --analyze"
+        "build:analyze": "wp --config config/webpack.config.js --mode production --env production --analyze",
+        "mock-api": "npx mockoon-cli start --data ./portfolio-website-bff.mockoon.json"
     },
     "dependencies": {
         "axios": "^0.24.0",
