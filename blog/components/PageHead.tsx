@@ -3,7 +3,6 @@ import Head from 'next/head'
 
 import * as config from '@/lib/config'
 import * as types from '@/lib/types'
-import { getSocialImageUrl } from '@/lib/get-social-image-url'
 import { getSiteConfig } from '@/lib/get-config-value'
 
 export const PageHead: React.FC<
@@ -23,8 +22,6 @@ export const PageHead: React.FC<
   }
 
   description = description ?? site?.description
-
-  const socialImageUrl = getSocialImageUrl(pageId) || image
 
   return (
     <Head>
@@ -60,15 +57,7 @@ export const PageHead: React.FC<
         </>
       )}
 
-      {socialImageUrl ? (
-        <>
-          <meta name='twitter:card' content='summary_large_image' />
-          <meta name='twitter:image' content={socialImageUrl} />
-          <meta property='og:image' content={socialImageUrl} />
-        </>
-      ) : (
-        <meta name='twitter:card' content='summary' />
-      )}
+      <meta name='twitter:card' content='summary' />
 
       {url && (
         <>
